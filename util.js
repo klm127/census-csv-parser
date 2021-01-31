@@ -28,8 +28,8 @@ exports.csvArray = function csvArray(csvtext, delim=',',rowdelim='\n',trim=true)
 /**
  * Chops a row from an array. 
  * @param {Array[]} arr - the 2-dimensional array to operate on
- * @param {(number | number[] | RegExp) } find - the row index to remove, an array of row indexes to remove, or a regular expression. If a regular expression is passed, all rows that match the regex will be removed. Numbers may be negative to operate from the ned.
- * @param {number} [regindex=0] - the column index to search when using regular expressions. Defaults to the first column, index 0, as the typical use case would be to remove rows corresponding to unwanted data categories. If set to -1, chop will search the entire array for the regex, and whenever it finds a match, it will delete the entire row on which it was found.
+ * @param {(number | number[] | RegExp) } find The row index to remove, an array of row indexes to remove, or a regular expression. If a regular expression is passed, all rows that match the regex will be removed. Numbers may be negative to operate from the end.
+ * @param {number} [regindex=0] The **column** index to search when using regular expressions. Defaults to the first column, index 0, as the typical use case would be to remove rows corresponding to unwanted data categories. If set to -1, chop will search the entire array for the regex, and whenever it finds a match, it will delete the entire row on which it was found.
  * @returns {Array} - A 2-dimensional array, possibly with some rows removed.
  */
 exports.chop = function(arr, find, regIndex = 0) {
@@ -73,7 +73,61 @@ exports.chop = function(arr, find, regIndex = 0) {
     }
     return arr; //if wrong find type was passed, just give back the array
 }
-//add chop column here
+/**
+ * Chops a column from an array
+ * @param {*} arr A 2 dimensional array to operate on. Rows should be **equal length**
+ * @param {(number | number[] | RegExp)} find The column index to remove, an array of column indexes to remove, or a regular expression. If a regular expression is passed _all_ columns that match on the RegIndex row will be removed. Negative numbers will operate from the last column backwards. 
+ * @param {number} [regIndex=0] The **row** index to search when using regular expressions as the find parameter. Defaults to first row, index 0, as the typical use case would be to remove columns representing unwanted data, and column headers are usually located at row 0. If set to -1, chopColumn will search the entire array for a regex, and whenever it finds a match, it will delete the entire column on which it was found.
+ */
+exports.chopColumn = function(arr, find, regIndex = 0) {
+    let height = arr.length;
+    let width = arr[0].length;
+    let newArr = [];
+    if(typeof find == 'number') { //remove 1 column
+        if(find < 0) { //align index
+            find = arr[0].length + find-1;
+        }
+        if(find < 0 || find>= arr[0].length) {
+            return arr; //index out of bounds
+        }
+        for(let i = 0; i<height; i++) {
+            let newrow = [];
+            for(let j = 0; j<width; j++) {
+                if(j != find) {
+                    newrow.push(arr[i][j]);
+                }
+            }
+            newArr.push(newrow);
+        }
+    }
+    else if(find instanceof Array) { //remove all columns in find array
+        newArr = arr;
+        find = find.filter( (el)=> typeof el == 'number').sort( (a,b)=> b-a); //remove numbers, sort DESC
+        find.forEach( (n) => {newArr = exports.chopColumn(newArr,n,regIndex)})
+    }
+    else if(find instanceof RegExp) { //remove all columns that match regex
+        let matchcols = [];
+        if(regIndex < 0) {
+            arr.forEach( (row) => {
+                row.forEach( (el, index)=> {
+                    if(find.test(el)) {
+                        matchcols.push(index);
+                    }
+                })
+            })
+        }
+        else {
+            arr[regIndex].forEach( (el,index) => {
+                if(find.test(el)) {
+                    matchcols.push(index);
+                }
+            })
+        }
+        newArr = arr;
+        newArr = exports.chopColumn(newArr,matchcols,regIndex);
+    }
+    return newArr;
+}
 /**
  * Clears quotations or another character from elements in a 2D array or portion of that array.
  * @param {Array[]} arr - The 2-dimensional array to operate on.

@@ -9,6 +9,7 @@ const csvtext = '"geo","id001","id002\n"'+
                     '"pop!!15-20!!divorced","3.5","45.8"\n';
 const csvArray = util.csvArray(csvtext);
 
+try {
 // Creating array from CSV
     assert(csvArray.length == 5, `Csv not parsed to correct length Expected 5 was ${csvArray.length}.`)
     log('csvArray is correct length','green');
@@ -22,6 +23,43 @@ const csvArray = util.csvArray(csvtext);
         [ '"pop!!15-20!!divorced"', '"3.5"', '"45.8"' ]], 
         "Array not configured as expected");
     log('csvArray is as expected','green');
+// Removing columns from array
+    let colchop1 = util.chopColumn(csvArray, 0);
+    assert.deepStrictEqual(colchop1,[
+        [  '"id001"', '"id002' ],
+        [  '"AK"', '"AL"' ],
+        [  '"100"', '"1000' ],
+        [  '"20"', '"200"' ],
+        [  '"3.5"', '"45.8"' ]
+      ],"Expected first column to be chopped");
+    log("chopping first column is as expected",'green')
+    let colchopArr = util.chopColumn(csvArray, [0,2]);
+    assert.deepStrictEqual(colchopArr,[
+        [  '"id001"' ],
+        [  '"AK"' ],
+        [  '"100"' ],
+        [  '"20"' ],
+        [  '"3.5"']
+      ],'Expected first and third column to be chopped');
+    log('chopping multiple columns by array as expected','green');
+    let colchopReg = util.chopColumn(csvArray, /001/);
+    assert.deepStrictEqual(colchopReg,[
+        [ '"geo"', '"id002' ],
+        [ '""name"', '"AL"' ],
+        [ '"pop"',  '"1000' ],
+        [ '""pop!!15-20"', '"200"' ],
+        [ '"pop!!15-20!!divorced"', '"45.8"' ]
+      ], 'Expected second column to be chopped by Regex /001/g');
+    log('chopping column by regex as expected','green');
+    let colchopAll = util.chopColumn(csvArray,/A/,-1);
+    assert.deepStrictEqual(colchopAll,[
+        [ '"geo"' ],
+        [ '""name"' ],
+        [ '"pop"' ],
+        [ '""pop!!15-20"' ],
+        [ '"pop!!15-20!!divorced"' ]
+      ],'Expected 2nd and 3rd column to be chopped by Regex /A/g when searching all array');
+    log('chopping columns based on full-array regex search as expected','green');
 // Removing rows from array
     let chop1 = util.chop(csvArray,0);
     assert.deepStrictEqual(chop1, [
@@ -180,3 +218,10 @@ const csvArray = util.csvArray(csvtext);
     let testtranspose = util.transpose(rotArr);
     assert.deepStrictEqual(testtranspose, [[1,3],[2,4],[3,5]], "Expected transpose to yield 3 rows of 2 columns each");
     log('Transposing array worked as expected','green');
+} catch(ex) {
+    log(`AssertionError, ${ex.operator}: ${ex.message}`,'red');
+    log('actual:','red');
+    log(ex.actual);
+    log('expected:','blue')
+    log(ex.expected);
+}
