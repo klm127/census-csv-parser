@@ -1,0 +1,20 @@
+{
+  "name": "census-csv-parser",
+  "version": "1.0.0",
+  "description": "tool for parsing census csvs into .json objects",
+  "main": "index.js",
+  "scripts": {
+    "testutil": "testutils.js"
+  },
+  "keywords": [
+    "census",
+    "csv",
+    "data"
+  ],
+  "author": "klm127",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/klm127/census-csv-parser.git"
+  }
+}
