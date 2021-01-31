@@ -73,6 +73,7 @@ exports.chop = function(arr, find, regIndex = 0) {
     }
     return arr; //if wrong find type was passed, just give back the array
 }
+//add chop column here
 /**
  * Clears quotations or another character from elements in a 2D array or portion of that array.
  * @param {Array[]} arr - The 2-dimensional array to operate on.
@@ -189,11 +190,59 @@ exports.chainSingle = function(arr1d, val, obj={}, mutate=true) {
     return obj;
 }
 /**
+ * Creates nested properties in an object based on an array and assigns a value to the last property in the chain.
+ * @param {Array[]} arr2d - A 2 dimensional array aligned with the vals array. The nested arrays contain strings representing properties to chain.
+ * @param {*[]} vals - A 1 dimensional array aliged with arr1d where vals[x] is the value to be chained with arr1d[x]
+ * @param {Object} [parentobj={}] - the parent object to mutate
+ * @param {boolean} [mutate=true] - controls whether a semi-deep copy of parentobj is made before chaining.
+ * @returns {Object}- the parent object with the new properties chain, or a semi-deep clone of the parent object with the new properties chain if mutate is set to true.
+ */
+exports.chainMultiple = function(arr2d, vals, parentobj={}, mutate=true) {
+    if(!mutate) {
+        parentobj = deepCopySimple(parentobj);
+    }
+    arr2d.forEach( (subArray, iteration) => {
+        parentobj = exports.chainSingle(subArray, vals[iteration], parentobj, mutate)
+    })
+    return parentobj;
+}
+/**
+ * Gets a column from a 2D array as an array.
+ * @param {*} arr2d The array to operate on
+ * @param {*} colIndex The index of the column to get
+ * @returns {*[]} An array of the values in the column.
+ */
+exports.getColumn = function(arr2d, colIndex) {
+    let arr = [];
+    arr2d.forEach( (row) => {
+        arr.push(row[colIndex]);
+    })
+    return arr;
+}
+/**
+ * Transposes an array so columns become rows
+ * @param {*[][]} arr2d A 2D array to transpose. Rows should be equal length.
+ * @returns {*[][]} A transposed array
+ */
+exports.transpose = function(arr2d) {
+    let newArr = [];
+    let startingWidth = arr2d[0].length;
+    let startingHeight = arr2d.length;
+    for(let i = 0; i < startingWidth; i++) {
+        let newrow = [];
+        for(let j = 0; j < startingHeight; j++) {
+            newrow.push(arr2d[j][i]);
+        }
+        newArr.push(newrow);
+    }
+    return newArr;
+}
+/**
  * Uses JSON.parse/stringify to deep-copy an array.
  * @private
- * @param {Array[]} arr - The array to copy. Should not have nested complex types.
- * @returns A clone of the array 
+ * @param {(object | array)} obj - The object or array to copy. Should not have nested complex types.
+ * @returns A clone of the object array 
  */
-function deepCopySimple(arr) {
-    return JSON.parse(JSON.stringify(arr));
+function deepCopySimple(obj) {
+    return JSON.parse(JSON.stringify(obj));
 }

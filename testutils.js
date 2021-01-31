@@ -160,3 +160,23 @@ const csvArray = util.csvArray(csvtext);
     let propTestChain = util.chainSingle(propChain, "nestedVal", {});
     assert.deepStrictEqual(propTestChain, { depth1: { depth2: { depth3: 'nestedVal' } } },"Expected 3 nested properties")
     log("Chaining an array to a single object worked as expected","green");
+    const propsArray = [
+        ["prop1","subprop1"],
+        ["prop2","subprop2"]
+    ];
+    const valsArray = ["val1","val2"];
+    let propArrTestChain = util.chainMultiple(propsArray, valsArray);
+    assert.deepStrictEqual(propArrTestChain, { prop1: { subprop1: 'val1' }, prop2: { subprop2: 'val2' } },"Expected object with 2 nested property chains")
+    log("Chaining multiple props and vals to a single object worked as expected","green");
+
+//rotations - get column, rotate array
+    const rotArr = [
+        [1,2,3],
+        [3,4,5]
+    ]
+    let testgetcol = util.getColumn(rotArr,1);
+    assert.deepStrictEqual(testgetcol, [2,4], "Expected to get column index 1 as array");
+    log('Getting a column from a 2D array worked as expected','green');
+    let testtranspose = util.transpose(rotArr);
+    assert.deepStrictEqual(testtranspose, [[1,3],[2,4],[3,5]], "Expected transpose to yield 3 rows of 2 columns each");
+    log('Transposing array worked as expected','green');
