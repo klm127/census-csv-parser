@@ -4,7 +4,7 @@
   "description": "tool for parsing census csvs into .json objects",
   "main": "index.js",
   "scripts": {
-    "testutil": "testutils.js"
+    "test": "node test.js"
   },
   "keywords": [
     "census",
