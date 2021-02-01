@@ -6,7 +6,15 @@ census-csv-parser aims to ease the cleaning of csv data, especially data gathere
 
 The typical goal is generally to ultimately convert .csv data into .json objects, whereby column or header rows become nested properties of those objects.
 
-### example
+## Dependencies
+
+Node.js
+
+## Documentation
+
+
+
+## What it does
 
 A section of geograph data downloaded from the census website might look like this:
 
@@ -96,3 +104,30 @@ And we want the output to look like this:
     }
 }
 ```
+
+census-csv-parser accomplishes this by using utility functions to clean the data. Properties are nested in the output `.json` by defining a property row or column (row not yet implemented) and a header row (column not yet implemented) in the `Parser` object. This property column is an array of arrays, each sub-array describing a path to map properties to. The header row describes the objects properties will be mapped to. As `Parser` converts the data array to an object, it maps values from the property column to objects created from the header row and places them all in a wrapper object. 
+
+This mapping, defined in the `chain` and `chainMultiple` functions in the `util` namespace has some interesting features. Here is how it operates.
+
+## Chain procedure
+
+1. It gets the property arrays, header array, 2-d data array for the intersecting area and iterates through the header array and data array columns.
+    1. It creates a new object in the wrapper object where the key is equal to the header.
+    1. It iterates through the property array and intersecting data column.
+        1. For each row of the property array, it iterates through that sub-array.
+            - The next value of the sub-array to sees if it already exists in the object as a property.
+                - If it does, it is checked to see if it's a final value (not a sub-object)
+                    - If it's a final value it checks if there more properties to iterate.
+                        * If there are not more properties to iterate, it overwrites that value. (duplicate property mapping)
+                        * If there are more properties to map, it creates a new object at that key and maps the existing final value to a key with the same name as the parent object. This accounts for the encountering of "total" type values. It then continues the mapping process recursively with the new object and the unused portion of the properties sub-array.
+                    * If it's not a final value, (it's an object), it continues the mapping process recursively with that object and the unused portion of the properties array.
+                - If the property does not exist yet in the object, it checks to see whether its final property.
+                    * If it is on the final property, it creates that property in the object and sets its value to the data point.
+                    * If it is not on the final property, it creates a new object for that property and continues the mapping process recursively with the new object and the unused portion of the properties sub-array.
+        2. When it finishes with the property sub-array, it moves to the next property sub-array and data point.
+    3. When it finishes with a data column, it moves to the next header value and next data column and repeats the process.
+2. When it has finished mapping all data to objects, it returns that object.
+
+## Other
+
+See the [Example](./Example.html) namespace for more example usage.
