@@ -15,8 +15,8 @@ const outputPath = "./json_results/maritaldataSmall.json";
  * @see {@link https://github.com/klm127/census-csv-parser/tree/master/test_data | input csvs on Github} for example inputs.
  * @see {@link https://github.com/klm127/census-csv-parser/tree/master/json_results | output .jsons on Github } for example outputs.
  * @example <caption>Example.js - using fs to write files and census-csv-parser members to process census data</caption>
- * const Parser = require('./parser')
-const util = require('./util')
+ * const Parser = require('census-csv-parser/parser')
+const util = require('census-csv-parser/util')
 const fs = require('fs').promises;
 
 const inputPath = "./test_data/maritaldataSmall.csv"; 

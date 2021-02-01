@@ -9,21 +9,23 @@ The typical goal is generally to ultimately convert .csv data into .json objects
 
 ## Dependencies
 
-Node.js
+[node](https://nodejs.org/en/)
+[npm](https://www.npmjs.com/)
 
 ## Documentation
 
 [Available here](quaffingcode.com/census-csv-parser/doc/index.html)
 
-## Installation
-
-Clone this repositor with git using: `git clone https://github.com/klm127/census-csv-parser.git`
-Install with npm using `npm install census-csv-parser`
-
 ## Running
 
-Use [Node.js](https://nodejs.org/en/)
-...
+- Use [Node.js](https://nodejs.org/en/)
+- Create your project folder
+- Run `npm init`
+- Run `npm install census-csv-parser`
+- To access the parser, use `const Parser = require('census-csv-parser/parser')`
+- To access the utility functions, use `const util = require('census-csv-parser/util')`
+- To create a new parser object, `const parser = new Parser()
+- To access a util function, use, i.e. `util.csvArray(mycsvtext)`
 
 ## What it does
 
