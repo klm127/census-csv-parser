@@ -2,13 +2,15 @@
   "name": "census-csv-parser",
   "version": "1.0.1",
   "description": "tool for parsing census csvs into .json objects",
+  "homepage": "https://quaffingcode.com",
   "main": "parser.js",
   "scripts": {
     "test": "node ./tests/testutils.js && node ./tests/testparser.js",
     "test-util": "node ./tests/testutils.js",
     "document-docdash": "jsdoc . -t ./node_modules/docdash -R README.md -d ./doc/",
     "document-clean": "jsdoc . -t ./node_modules/clean-jsdoc-theme -d ./doc/ -R README.md",
-    "document": "jsdoc . -d ./doc/ -R README.md"
+    "document": "jsdoc . -d ./doc/ -R README.md",
+    "document-minami": "jsdoc . -d ./doc/ -R README.md -t ./node_modules/minami"
   },
   "keywords": [
     "census",
@@ -22,5 +24,8 @@
     "url": "https://github.com/klm127/census-csv-parser.git"
   },
   "dependencies": {
+  },
+  "devDependencies": {
+    "minami": "^1.2.3"
   }
 }
