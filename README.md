@@ -1,5 +1,6 @@
 # census-csv-parser
 
+
 ## Description
 
 census-csv-parser aims to ease the cleaning of csv data, especially data gathered from [census.gov](https://www.census.gov), by providing utiliy functions and objects for quickly scrubbing large portions of csv or other text data.
@@ -12,7 +13,17 @@ Node.js
 
 ## Documentation
 
+[Available here](quaffingcode.com/census-csv-parser/doc/index.html)
 
+## Installation
+
+Clone this repositor with git using: `git clone https://github.com/klm127/census-csv-parser.git`
+Install with npm using `npm install census-csv-parser`
+
+## Running
+
+Use [Node.js](https://nodejs.org/en/)
+...
 
 ## What it does
 
