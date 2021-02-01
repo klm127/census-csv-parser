@@ -4,7 +4,9 @@
   "description": "tool for parsing census csvs into .json objects",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "node test.js",
+    "document-docdash": "jsdoc . -t ./node_modules/docdash",
+    "document-clean":"jsdoc . -t ./node_modules/clean-jsdoc-theme"
   },
   "keywords": [
     "census",
@@ -16,5 +18,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/klm127/census-csv-parser.git"
+  },
+  "dependencies": {
+    "docdash": "^1.2.0",
+    "jsdoc-baseline": "https://github.com/hegemonic/baseline/tarball/master"
   }
 }
