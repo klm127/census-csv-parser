@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Home - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Example.html">Example</a><ul class='methods'><li data-type='method'><a href="Example.html#.example">example</a></li></ul></li><li><a href="Parser.html">Parser</a><ul class='methods'><li data-type='method'><a href="Parser.html#clear">clear</a></li><li data-type='method'><a href="Parser.html#mapProps">mapProps</a></li><li data-type='method'><a href="Parser.html#numerify">numerify</a></li><li data-type='method'><a href="Parser.html#propsToArray">propsToArray</a></li><li data-type='method'><a href="Parser.html#setHeaders">setHeaders</a></li><li data-type='method'><a href="Parser.html#setProps">setProps</a></li></ul></li><li><a href="util.html">util</a><ul class='methods'><li data-type='method'><a href="util.html#.chainMultiple">chainMultiple</a></li><li data-type='method'><a href="util.html#.chainSingle">chainSingle</a></li><li data-type='method'><a href="util.html#.chop">chop</a></li><li data-type='method'><a href="util.html#.chopColumn">chopColumn</a></li><li data-type='method'><a href="util.html#.clear">clear</a></li><li data-type='method'><a href="util.html#.csvArray">csvArray</a></li><li data-type='method'><a href="util.html#.getColumn">getColumn</a></li><li data-type='method'><a href="util.html#.numerify">numerify</a></li><li data-type='method'><a href="util.html#.toArray">toArray</a></li><li data-type='method'><a href="util.html#.transpose">transpose</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+    <section class="package">
+        <h3> </h3>		
+    </section>
+
+
+
+
+
+
+
+
+
+    
+
+
+
+    <section class="readme usertext">
+        <article><h1>census-csv-parser</h1>
+<h2>Description</h2>
+<p>census-csv-parser aims to ease the cleaning of csv data, especially data gathered from <a href="https://www.census.gov">census.gov</a>, by providing utiliy functions and objects for quickly scrubbing large portions of csv or other text data.</p>
+<p>The typical goal is generally to ultimately convert .csv data into .json objects, whereby column or header rows become nested properties of those objects.</p>
+<h2>Dependencies</h2>
+<p>Node.js</p>
+<h2>Documentation</h2>
+<h2>What it does</h2>
+<p>A section of geograph data downloaded from the census website might look like this:</p>
+<table>
+<thead>
+<tr>
+<th>&quot;GEO_ID&quot;</th>
+<th>&quot;NAME&quot;</th>
+<th>&quot;S1201_C01_001E&quot;</th>
+<th>&quot;S1201_C01_001M&quot;</th>
+<th>&quot;S1201_C01_002E&quot;</th>
+<th>&quot;S1201_C01_002M&quot;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;id&quot;</td>
+<td>&quot;Geographic Area Name&quot;</td>
+<td>&quot;Estimate!!Total!!Population 15 years and over&quot;</td>
+<td>&quot;Margin of Error!!Total!!Population 15 years and over&quot;</td>
+<td>&quot;Estimate!!Total!!Population 15 years and over!!AGE AND SEX!!Males 15 years and over&quot;</td>
+<td>&quot;Margin of Error!!Total!!Population 15 years and over!!AGE AND SEX!!Males 15 years and over&quot;</td>
+</tr>
+<tr>
+<td>&quot;0400000US01&quot;</td>
+<td>&quot;Alabama&quot;</td>
+<td>&quot;4004468&quot;</td>
+<td>&quot;3955&quot;</td>
+<td>&quot;1909410&quot;</td>
+<td>&quot;4332&quot;</td>
+</tr>
+<tr>
+<td>&quot;0400000US02&quot;</td>
+<td>&quot;Alaska&quot;</td>
+<td>&quot;578225&quot;</td>
+<td>&quot;856&quot;</td>
+<td>&quot;301975&quot;</td>
+<td>&quot;1721&quot;</td>
+</tr>
+<tr>
+<td>&quot;0400000US04&quot;</td>
+<td>&quot;Arizona&quot;</td>
+<td>&quot;5919085&quot;</td>
+<td>&quot;1614&quot;</td>
+<td>&quot;2926106&quot;</td>
+<td>&quot;2405&quot;</td>
+</tr>
+<tr>
+<td>&quot;0400000US05&quot;</td>
+<td>&quot;Arkansas&quot;</td>
+<td>&quot;2439812&quot;</td>
+<td>&quot;2922&quot;</td>
+<td>&quot;1181259&quot;</td>
+<td>&quot;3972&quot;</td>
+</tr>
+<tr>
+<td>&quot;0400000US06&quot;</td>
+<td>&quot;California&quot;</td>
+<td>&quot;32124112&quot;</td>
+<td>&quot;4693&quot;</td>
+<td>&quot;15865087&quot;</td>
+<td>&quot;6043&quot;</td>
+</tr>
+<tr>
+<td>&quot;0400000US08&quot;</td>
+<td>&quot;Colorado&quot;</td>
+<td>&quot;4720810&quot;</td>
+<td>&quot;2634&quot;</td>
+<td>&quot;2372402&quot;</td>
+<td>&quot;4047&quot;</td>
+</tr>
+<tr>
+<td>&quot;0400000US09&quot;</td>
+<td>&quot;Connecticut&quot;</td>
+<td>&quot;2975029&quot;</td>
+<td>&quot;1595&quot;</td>
+<td>&quot;1441236&quot;</td>
+<td>&quot;2275&quot;</td>
+</tr>
+</tbody>
+</table>
+<p>And we want the output to look like this:</p>
+<pre class="prettyprint source"><code>{
+    &quot;Alabama&quot;: {
+        &quot;Total&quot;: {
+            &quot;Population 15 years and over&quot;: {
+                &quot;Population 15 years and over&quot;: 3955,
+                &quot;AGE AND SEX&quot;: {
+                    &quot;Males 15 years and over&quot;: 1909410
+                }
+            }
+        }
+    },
+    &quot;Alaska&quot;: {
+        &quot;Total&quot;: {
+            &quot;Population 15 years and over&quot;: {
+                &quot;Population 15 years and over&quot;: 856,
+                &quot;AGE AND SEX&quot;: {
+                    &quot;Males 15 years and over&quot;: 301975
+                }
+            }
+        }
+    },
+    &quot;Arizona&quot;: {
+        &quot;Total&quot;: {
+            &quot;Population 15 years and over&quot;: {
+                &quot;Population 15 years and over&quot;: 1614,
+                &quot;AGE AND SEX&quot;: {
+                    &quot;Males 15 years and over&quot;: 2926106
+                }
+            }
+        }
+    },
+    &quot;Arkansas&quot;: {
+        &quot;Total&quot;: {
+            &quot;Population 15 years and over&quot;: {
+                &quot;Population 15 years and over&quot;: 2922,
+                &quot;AGE AND SEX&quot;: {
+                    &quot;Males 15 years and over&quot;: 1181259
+                }
+            }
+        }
+    },
+    &quot;California&quot;: {
+        &quot;Total&quot;: {
+            &quot;Population 15 years and over&quot;: {
+                &quot;Population 15 years and over&quot;: 4693,
+                &quot;AGE AND SEX&quot;: {
+                    &quot;Males 15 years and over&quot;: 15865087
+                }
+            }
+        }
+    },
+    &quot;Colorado&quot;: {
+        &quot;Total&quot;: {
+            &quot;Population 15 years and over&quot;: {
+                &quot;Population 15 years and over&quot;: 2634,
+                &quot;AGE AND SEX&quot;: {
+                    &quot;Males 15 years and over&quot;: 2372402
+                }
+            }
+        }
+    },
+    &quot;Connecticut&quot;: {
+        &quot;Total&quot;: {
+            &quot;Population 15 years and over&quot;: {
+                &quot;Population 15 years and over&quot;: 1595,
+                &quot;AGE AND SEX&quot;: {
+                    &quot;Males 15 years and over&quot;: 1441236
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<p>census-csv-parser accomplishes this by using utility functions to clean the data. Properties are nested in the output <code>.json</code> by defining a property row or column (row not yet implemented) and a header row (column not yet implemented) in the <code>Parser</code> object. This property column is an array of arrays, each sub-array describing a path to map properties to. The header row describes the objects properties will be mapped to. As <code>Parser</code> converts the data array to an object, it maps values from the property column to objects created from the header row and places them all in a wrapper object.</p>
+<p>This mapping, defined in the <code>chain</code> and <code>chainMultiple</code> functions in the <code>util</code> namespace has some interesting features. Here is how it operates.</p>
+<h2>Chain procedure</h2>
+<ol>
+<li>It gets the property arrays, header array, 2-d data array for the intersecting area and iterates through the header array and data array columns.
+<ol>
+<li>It creates a new object in the wrapper object where the key is equal to the header.</li>
+<li>It iterates through the property array and intersecting data column.
+<ol>
+<li>For each row of the property array, it iterates through that sub-array.
+<ul>
+<li>The next value of the sub-array to sees if it already exists in the object as a property.
+<ul>
+<li>If it does, it is checked to see if it's a final value (not a sub-object)
+<ul>
+<li>If it's a final value it checks if there more properties to iterate.
+<ul>
+<li>If there are not more properties to iterate, it overwrites that value. (duplicate property mapping)</li>
+<li>If there are more properties to map, it creates a new object at that key and maps the existing final value to a key with the same name as the parent object. This accounts for the encountering of &quot;total&quot; type values. It then continues the mapping process recursively with the new object and the unused portion of the properties sub-array.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>If it's not a final value, (it's an object), it continues the mapping process recursively with that object and the unused portion of the properties array.</li>
+</ul>
+</li>
+<li>If the property does not exist yet in the object, it checks to see whether its final property.
+<ul>
+<li>If it is on the final property, it creates that property in the object and sets its value to the data point.</li>
+<li>If it is not on the final property, it creates a new object for that property and continues the mapping process recursively with the new object and the unused portion of the properties sub-array.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>When it finishes with the property sub-array, it moves to the next property sub-array and data point.</li>
+</ol>
+</li>
+<li>When it finishes with a data column, it moves to the next header value and next data column and repeats the process.</li>
+</ol>
+</li>
+<li>When it has finished mapping all data to objects, it returns that object.</li>
+</ol>
+<h2>Other</h2>
+<p>See the <a href="./Example.html">Example</a> namespace for more example usage.</p></article>
+    </section>
+
+
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.5</a> on Mon Feb 01 2021 15:53:45 GMT-0500 (Eastern Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

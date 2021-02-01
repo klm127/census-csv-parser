@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>example.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Example.html">Example</a><ul class='methods'><li data-type='method'><a href="Example.html#.example">example</a></li></ul></li><li><a href="Parser.html">Parser</a><ul class='methods'><li data-type='method'><a href="Parser.html#clear">clear</a></li><li data-type='method'><a href="Parser.html#mapProps">mapProps</a></li><li data-type='method'><a href="Parser.html#numerify">numerify</a></li><li data-type='method'><a href="Parser.html#propsToArray">propsToArray</a></li><li data-type='method'><a href="Parser.html#setHeaders">setHeaders</a></li><li data-type='method'><a href="Parser.html#setProps">setProps</a></li></ul></li><li><a href="util.html">util</a><ul class='methods'><li data-type='method'><a href="util.html#.chainMultiple">chainMultiple</a></li><li data-type='method'><a href="util.html#.chainSingle">chainSingle</a></li><li data-type='method'><a href="util.html#.chop">chop</a></li><li data-type='method'><a href="util.html#.chopColumn">chopColumn</a></li><li data-type='method'><a href="util.html#.clear">clear</a></li><li data-type='method'><a href="util.html#.csvArray">csvArray</a></li><li data-type='method'><a href="util.html#.getColumn">getColumn</a></li><li data-type='method'><a href="util.html#.numerify">numerify</a></li><li data-type='method'><a href="util.html#.toArray">toArray</a></li><li data-type='method'><a href="util.html#.transpose">transpose</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">example.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @namespace Example
+ */
+
+const Parser = require('./parser')
+const util = require('./util')
+const fs = require('fs').promises;
+
+const inputPath = "./test_data/maritaldataSmall.csv";
+const outputPath = "./json_results/maritaldataSmall.json";
+
+/**
+ * An example of using this library to parse a .csv into a mapped .json
+ * @memberof! Example
+ * @see {@link https://github.com/klm127/census-csv-parser/tree/master/test_data | input csvs on Github} for example inputs.
+ * @see {@link https://github.com/klm127/census-csv-parser/tree/master/json_results | output .jsons on Github } for example outputs.
+ * @example &lt;caption>Example.js - using fs to write files and census-csv-parser members to process census data&lt;/caption>
+ * const Parser = require('./parser')
+const util = require('./util')
+const fs = require('fs').promises;
+
+const inputPath = "./test_data/maritaldataSmall.csv"; 
+const outputPath = "./json_results/maritaldataSmall.json";
+
+(async function(){ //file read/write (fs) is asynchronous
+    const content = await fs.readFile(inputPath,'utf8') //read file
+    let arr = util.csvArray(content); //convert to array with default delimiters
+    arr = util.transpose(arr); //rotate the array- columns to rows
+    arr = util.chop(arr,0); //chop off top row
+    arr = util.chopColumn(arr,0); //chop off top column
+    arr = util.clear(arr); //clear quotation marks(default value)
+    arr = util.numerify(arr); //convert values to numbers where possible
+    arr = util.clear(arr,/Margin of Error!!/); //clear unwanted text
+    arr = util.clear(arr,/Estimate!!/); //clear unwanted text
+    let parser = new Parser(arr); //create new parser and load it with array
+    parser.setHeaders(0,0); //set the header row and columns
+    parser.setProps('row'); // set to map properties from row(column not yet implemented)
+    parser.propsToArray(/!!/); //split first column to an array on the regex
+    let json = parser.mapProps(); //get json
+    json = JSON.stringify(json); //convert to string for file write
+    await fs.writeFile(outputPath,json).catch((e)=> {console.log('error writing file'); console.log(e);})
+    //write
+})().catch( (ex) => {
+    console.log(`error!\n${ex}`) //catch exception
+})
+ */
+async function example(){
+    const content = await fs.readFile(inputPath,'utf8')
+    let arr = util.csvArray(content);
+    arr = util.transpose(arr);
+    arr = util.chop(arr,0);
+    arr = util.chopColumn(arr,0);
+    arr = util.clear(arr);
+    arr = util.numerify(arr);
+    arr = util.clear(arr,/Margin of Error!!/);
+    arr = util.clear(arr,/Estimate!!/);
+    let parser = new Parser(arr);
+    parser.setHeaders(0,0);
+    parser.setProps('row');
+    parser.propsToArray(/!!/);
+    let json = parser.mapProps();
+    json = JSON.stringify(json);
+    await fs.writeFile(outputPath,json).catch((e)=> {console.log('error writing file'); console.log(e);})
+
+}
+example().catch( (ex) => {
+    console.log(`error!\n${ex}`)
+})</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.5</a> on Mon Feb 01 2021 15:53:45 GMT-0500 (Eastern Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
