@@ -1,10 +1,14 @@
 /**
+ * @namespace util
+ */
+/**
  * Parses csv into a 2-dimensional array. By default, also trims rows and columns left by trailing delimiters.
  * @param {string} csvtext - A csv string
  * @param {string} [delim=','] - The value delimiter
  * @param {string} [row_delim='\n'] - The row delimiter
  * @param {boolean} [trim=true] - Trims empty trailing rows and empty trailing elements in rows
  * @returns {Array} - A 2-dimensional array, with each sub-array representing rows.
+ * @memberof util
  */
 exports.csvArray = function csvArray(csvtext, delim=',',rowdelim='\n',trim=true) {
     let arr = csvtext.split(rowdelim);
@@ -31,6 +35,7 @@ exports.csvArray = function csvArray(csvtext, delim=',',rowdelim='\n',trim=true)
  * @param {(number | number[] | RegExp) } find The row index to remove, an array of row indexes to remove, or a regular expression. If a regular expression is passed, all rows that match the regex will be removed. Numbers may be negative to operate from the end.
  * @param {number} [regindex=0] The **column** index to search when using regular expressions. Defaults to the first column, index 0, as the typical use case would be to remove rows corresponding to unwanted data categories. If set to -1, chop will search the entire array for the regex, and whenever it finds a match, it will delete the entire row on which it was found.
  * @returns {Array} - A 2-dimensional array, possibly with some rows removed.
+ * @memberof util
  */
 exports.chop = function(arr, find, regIndex = 0) {
     if(typeof find == 'number') { //remove 1 row
@@ -78,6 +83,7 @@ exports.chop = function(arr, find, regIndex = 0) {
  * @param {*} arr A 2 dimensional array to operate on. Rows should be **equal length**
  * @param {(number | number[] | RegExp)} find The column index to remove, an array of column indexes to remove, or a regular expression. If a regular expression is passed _all_ columns that match on the RegIndex row will be removed. Negative numbers will operate from the last column backwards. 
  * @param {number} [regIndex=0] The **row** index to search when using regular expressions as the find parameter. Defaults to first row, index 0, as the typical use case would be to remove columns representing unwanted data, and column headers are usually located at row 0. If set to -1, chopColumn will search the entire array for a regex, and whenever it finds a match, it will delete the entire column on which it was found.
+ * @memberof util
  */
 exports.chopColumn = function(arr, find, regIndex = 0) {
     let height = arr.length;
@@ -134,6 +140,7 @@ exports.chopColumn = function(arr, find, regIndex = 0) {
  * @param {(string | string[] | RegExp | RegExp[])} [find='"'] - The string, array of strings, or regular expression to remove.
  * @param {number} [rowInd=-1] - The row to operate on. If -1 (default), it will operate on the entire 2D array.
  * @param {number} [colInd=-1] - The column to operate on. If -1 (default), it will operate on the entire 2D array.
+ * @memberof util
  */
 exports.clear = function(arr, find='"', rowInd=-1, colInd=-1) {
     arr = [...arr]; //prevent mutation with duplication
@@ -180,6 +187,7 @@ exports.clear = function(arr, find='"', rowInd=-1, colInd=-1) {
  * @param {number} [rowInd=-1] -  The row index to operate on, default -1, which operates on all.
  * @param {number} [colInd=0] - The column index to operate on, default 0. -1 operates on all.
  * @todo implement 1 el array options
+ * @memberof util
  */
 exports.toArray = function(arr2d, find='!!', rowInd=-1, colInd=0) {
     let arr = deepCopySimple(arr2d); //don't mutate original array.
@@ -227,6 +235,7 @@ exports.toArray = function(arr2d, find='!!', rowInd=-1, colInd=0) {
  * @param {obj} [obj={}] - the parent object on which to perform the chaining
  * @param {boolean} [mutate=true] - controls whether a semi-deep copy of the object is made before chaining
  * @returns - the object with the new properties chain.
+ * @memberof util
  */
 exports.chainSingle = function(arr1d, val, obj={}, mutate=true) {
     if(!mutate) {
@@ -246,10 +255,11 @@ exports.chainSingle = function(arr1d, val, obj={}, mutate=true) {
 /**
  * Creates nested properties in an object based on an array and assigns a value to the last property in the chain.
  * @param {Array[]} arr2d - A 2 dimensional array aligned with the vals array. The nested arrays contain strings representing properties to chain.
- * @param {*[]} vals - A 1 dimensional array aliged with arr1d where vals[x] is the value to be chained with arr1d[x]
+ * @param {Array} vals - A 1 dimensional array aliged with arr1d where vals[x] is the value to be chained with arr1d[x]
  * @param {Object} [parentobj={}] - the parent object to mutate
  * @param {boolean} [mutate=true] - controls whether a semi-deep copy of parentobj is made before chaining.
  * @returns {Object}- the parent object with the new properties chain, or a semi-deep clone of the parent object with the new properties chain if mutate is set to true.
+ * @memberof util
  */
 exports.chainMultiple = function(arr2d, vals, parentobj={}, mutate=true) {
     if(!mutate) {
@@ -264,7 +274,8 @@ exports.chainMultiple = function(arr2d, vals, parentobj={}, mutate=true) {
  * Gets a column from a 2D array as an array.
  * @param {*} arr2d The array to operate on
  * @param {*} colIndex The index of the column to get
- * @returns {*[]} An array of the values in the column.
+ * @returns {Array[]} An array of the values in the column.
+ * @memberof util
  */
 exports.getColumn = function(arr2d, colIndex) {
     let arr = [];
@@ -275,8 +286,9 @@ exports.getColumn = function(arr2d, colIndex) {
 }
 /**
  * Transposes an array so columns become rows
- * @param {*[][]} arr2d A 2D array to transpose. Rows should be equal length.
- * @returns {*[][]} A transposed array
+ * @param {Array[]} arr2d A 2D array to transpose. Rows should be equal length.
+ * @returns {Array[]} A transposed array
+ * @memberof util
  */
 exports.transpose = function(arr2d) {
     let newArr = [];
@@ -292,10 +304,29 @@ exports.transpose = function(arr2d) {
     return newArr;
 }
 /**
+ * Goes through arrays and sub-arrays and converts any numeric strings to numbers that it finds
+ * @param {Array} arr An array of any dimension; numerify will recursively move through sub arrays.
+ * @returns {Array} An array with numeric strings converted to numbers.
+ */
+exports.numerify = function numerify(arr) {
+    return arr.map( (el) => {
+        if(el instanceof Array) {
+            return exports.numerify(el);
+        }
+        else if(+el){
+            return +el;
+        }
+        else {
+            return el;
+        }
+    })
+}
+/**
  * Uses JSON.parse/stringify to deep-copy an array.
  * @private
  * @param {(object | array)} obj - The object or array to copy. Should not have nested complex types.
  * @returns A clone of the object array 
+ * @memberof util
  */
 function deepCopySimple(obj) {
     return JSON.parse(JSON.stringify(obj));

@@ -200,11 +200,21 @@ try {
     log("Chaining an array to a single object worked as expected","green");
     const propsArray = [
         ["prop1","subprop1"],
-        ["prop2","subprop2"]
+        ["prop1","subprop2"],
+        ["prop2","subprop2","subprop3"]
     ];
-    const valsArray = ["val1","val2"];
+    const valsArray = ["val1","val2","val3"];
     let propArrTestChain = util.chainMultiple(propsArray, valsArray);
-    assert.deepStrictEqual(propArrTestChain, { prop1: { subprop1: 'val1' }, prop2: { subprop2: 'val2' } },"Expected object with 2 nested property chains")
+    assert.deepStrictEqual(propArrTestChain, { 
+        prop1: 
+            { subprop1: 'val1',
+              subprop2:  'val2'
+            },
+        prop2:
+            { subprop2: {
+                subprop3:"val3"
+            }}
+    },"Expected object with 2 nested property chains")
     log("Chaining multiple props and vals to a single object worked as expected","green");
 
 //rotations - get column, rotate array
@@ -218,6 +228,19 @@ try {
     let testtranspose = util.transpose(rotArr);
     assert.deepStrictEqual(testtranspose, [[1,3],[2,4],[3,5]], "Expected transpose to yield 3 rows of 2 columns each");
     log('Transposing array worked as expected','green');
+//numerify
+    let numArr = util.numerify(clearQuotes);
+    assert.deepStrictEqual(numArr,[
+        [ 'geo', 'id001', 'id002' ],
+        [ 'name', 'AK', 'AL' ],
+        [ 'pop', 100, 1000 ],
+        [ 'pop!!15-20', 20, 200 ],
+        [ 'pop!!15-20!!divorced', 3.5, 45.8 ]
+      ],"Numerifying array did not work as expected");
+    log('Numerifying array worked as expected','green')
+
+
+
 } catch(ex) {
     log(`AssertionError, ${ex.operator}: ${ex.message}`,'red');
     log('actual:','red');
