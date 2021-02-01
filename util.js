@@ -10,7 +10,7 @@
  * @returns {Array} - A 2-dimensional array, with each sub-array representing rows.
  * @memberof util
  */
-exports.csvArray = function csvArray(csvtext, delim=',',rowdelim='\n',trim=true) {
+function csvArray(csvtext, delim=',',rowdelim='\n',trim=true) {
     let arr = csvtext.split(rowdelim);
     let sum = 1;
     arr = arr.map( (row) => { 
@@ -37,7 +37,7 @@ exports.csvArray = function csvArray(csvtext, delim=',',rowdelim='\n',trim=true)
  * @returns {Array} - A 2-dimensional array, possibly with some rows removed.
  * @memberof util
  */
-exports.chop = function(arr, find, regIndex = 0) {
+function chop(arr, find, regIndex = 0) {
     if(typeof find == 'number') { //remove 1 row
         //remove a single row
         if(find < 0) {
@@ -52,7 +52,7 @@ exports.chop = function(arr, find, regIndex = 0) {
     }
     else if(Array.isArray(find)) { //remove all rows in array
         find = find.filter( (el)=> typeof el == 'number').sort( (a,b)=> b-a); //remove numbers, sort DESC
-        find.forEach( (n) => { arr = exports.chop(arr, n)}) //recursion!
+        find.forEach( (n) => { arr = chop(arr, n)}) //recursion!
         return arr;
     }
     else if(find instanceof RegExp) { //remove all rows that match regex
@@ -74,7 +74,7 @@ exports.chop = function(arr, find, regIndex = 0) {
                 }
             });
         }        
-        return exports.chop(arr, matchrows, regIndex)
+        return chop(arr, matchrows, regIndex)
     }
     return arr; //if wrong find type was passed, just give back the array
 }
@@ -85,7 +85,7 @@ exports.chop = function(arr, find, regIndex = 0) {
  * @param {number} [regIndex=0] The **row** index to search when using regular expressions as the find parameter. Defaults to first row, index 0, as the typical use case would be to remove columns representing unwanted data, and column headers are usually located at row 0. If set to -1, chopColumn will search the entire array for a regex, and whenever it finds a match, it will delete the entire column on which it was found.
  * @memberof util
  */
-exports.chopColumn = function(arr, find, regIndex = 0) {
+function chopColumn(arr, find, regIndex = 0) {
     let height = arr.length;
     let width = arr[0].length;
     let newArr = [];
@@ -109,7 +109,7 @@ exports.chopColumn = function(arr, find, regIndex = 0) {
     else if(find instanceof Array) { //remove all columns in find array
         newArr = arr;
         find = find.filter( (el)=> typeof el == 'number').sort( (a,b)=> b-a); //remove numbers, sort DESC
-        find.forEach( (n) => {newArr = exports.chopColumn(newArr,n,regIndex)})
+        find.forEach( (n) => {newArr = chopColumn(newArr,n,regIndex)})
     }
     else if(find instanceof RegExp) { //remove all columns that match regex
         let matchcols = [];
@@ -130,7 +130,7 @@ exports.chopColumn = function(arr, find, regIndex = 0) {
             })
         }
         newArr = arr;
-        newArr = exports.chopColumn(newArr,matchcols,regIndex);
+        newArr = chopColumn(newArr,matchcols,regIndex);
     }
     return newArr;
 }
@@ -142,14 +142,14 @@ exports.chopColumn = function(arr, find, regIndex = 0) {
  * @param {number} [colInd=-1] - The column to operate on. If -1 (default), it will operate on the entire 2D array.
  * @memberof util
  */
-exports.clear = function(arr, find='"', rowInd=-1, colInd=-1) {
+function clear(arr, find='"', rowInd=-1, colInd=-1) {
     arr = deepCopySimple(arr);
     if(typeof find == "string") {
         find = new RegExp(find, 'g'); //when passed a string, all instances of that string will be replaced, so global flag is set.
     }
     else if(find instanceof Array) {
         find.forEach( (el) => {
-            arr = exports.clear(arr, el, rowInd, colInd);
+            arr = clear(arr, el, rowInd, colInd);
         })
         return arr;
     }
@@ -189,7 +189,7 @@ exports.clear = function(arr, find='"', rowInd=-1, colInd=-1) {
  * @todo implement 1 el array options
  * @memberof util
  */
-exports.toArray = function(arr2d, find='!!', rowInd=-1, colInd=0) {
+function toArray(arr2d, find='!!', rowInd=-1, colInd=0) {
     let arr = deepCopySimple(arr2d); //don't mutate original array.
     if(typeof find == "string") {
         find = new RegExp(find,"g");
@@ -237,7 +237,7 @@ exports.toArray = function(arr2d, find='!!', rowInd=-1, colInd=0) {
  * @returns - the object with the new properties chain.
  * @memberof util
  */
-exports.chainSingle = function(arr1d, val, obj={}, mutate=true) {
+function chainSingle(arr1d, val, obj={}, mutate=true) {
     if(!mutate) {obj=deepCopySimple(obj);} //copy the object if we aren't supposed to mutate
     let prop = (arr1d instanceof Array) ? arr1d[0] : arr1d;
     let hasAlreadyProp = obj.hasOwnProperty(prop);
@@ -250,7 +250,7 @@ exports.chainSingle = function(arr1d, val, obj={}, mutate=true) {
                 obj[prop] = {};
                 obj[prop][prop] = oldval;
                 arr1d = arr1d.slice(1);
-                obj[prop] = exports.chainSingle(arr1d,val,obj[prop],mutate)
+                obj[prop] = chainSingle(arr1d,val,obj[prop],mutate)
 
             }
             else { //reassign if duplicate mapping
@@ -259,14 +259,14 @@ exports.chainSingle = function(arr1d, val, obj={}, mutate=true) {
         }
         else{ //move into without re-assigning if we have more to go down
             arr1d = arr1d.slice(1);
-            obj[prop] = exports.chainSingle(arr1d,val,obj[prop],mutate);
+            obj[prop] = chainSingle(arr1d,val,obj[prop],mutate);
         }
     }
     else {
         if(haveMorePropsToAssign) { //create new sub-obj if it doesnt exist and we have more to assign, and recurse
             arr1d = arr1d.slice(1);
             obj[prop] = {};
-            obj[prop] = exports.chainSingle(arr1d,val,obj[prop],mutate)
+            obj[prop] = chainSingle(arr1d,val,obj[prop],mutate)
         }
         else { //if we have no more props to assign, assign here
             obj[prop] = val;
@@ -288,7 +288,7 @@ function chainMultiple(arr2d, vals, parentobj={}, mutate=true) {
         parentobj = deepCopySimple(parentobj);
     }
     arr2d.forEach( (subArray, iteration) => {
-        parentobj = exports.chainSingle(subArray, vals[iteration], parentobj, mutate)
+        parentobj = chainSingle(subArray, vals[iteration], parentobj, mutate)
     })
     return parentobj;
 }
@@ -299,7 +299,7 @@ function chainMultiple(arr2d, vals, parentobj={}, mutate=true) {
  * @returns {Array[]} An array of the values in the column.
  * @memberof util
  */
-exports.getColumn = function(arr2d, colIndex) {
+function getColumn(arr2d, colIndex) {
     let arr = [];
     arr2d.forEach( (row) => {
         arr.push(row[colIndex]);
@@ -312,7 +312,7 @@ exports.getColumn = function(arr2d, colIndex) {
  * @returns {Array[]} A transposed array
  * @memberof util
  */
-exports.transpose = function(arr2d) {
+function transpose(arr2d) {
     let newArr = [];
     let startingWidth = arr2d[0].length;
     let startingHeight = arr2d.length;
@@ -329,11 +329,12 @@ exports.transpose = function(arr2d) {
  * Goes through arrays and sub-arrays and converts any numeric strings to numbers that it finds
  * @param {Array} arr An array of any dimension; numerify will recursively move through sub arrays.
  * @returns {Array} An array with numeric strings converted to numbers.
+ * @memberof util
  */
-exports.numerify = function numerify(arr) {
+function numerify(arr) {
     return arr.map( (el) => {
         if(el instanceof Array) {
-            return exports.numerify(el);
+            return numerify(el);
         }
         else if(+el){
             return +el;
@@ -355,3 +356,12 @@ function deepCopySimple(obj) {
 }
 
 exports.chainMultiple = chainMultiple;
+exports.csvArray = csvArray;
+exports.chop = chop;
+exports.chopColumn = chopColumn;
+exports.clear = clear;
+exports.toArray = toArray;
+exports.chainSingle = chainSingle;
+exports.getColumn = getColumn;
+exports.transpose = transpose;
+exports.numerify = numerify;
