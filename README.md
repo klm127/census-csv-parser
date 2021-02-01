@@ -14,7 +14,7 @@ The typical goal is generally to ultimately convert .csv data into .json objects
 
 ## Documentation
 
-[Available here](quaffingcode.com/census-csv-parser/doc/index.html)
+[Available here](https://quaffingcode.com/census-csv-parser/doc/index.html)
 
 ## Running
 
