@@ -145,12 +145,12 @@ try {
     log('clearing first col was as expected', 'green');
     let clearOneCel = util.clear(csvArray, '"', 1,1);
     assert.deepStrictEqual(clearOneCel, [
-        [ 'geo', '"id001"', '"id002' ],
-        [ 'name', 'AK', '"AL"' ],
-        [ 'pop', '"100"', '"1000' ],
-        [ 'pop!!15-20', '"20"', '"200"' ],
-        [ 'pop!!15-20!!divorced', '"3.5"', '"45.8"' ]
-    ],"Clearing one cell was not as expected.")
+        [ '"geo"', '"id001"', '"id002' ],
+        [ '""name"', 'AK', '"AL"' ],
+        [ '"pop"', '"100"', '"1000' ],
+        [ '""pop!!15-20"', '"20"', '"200"' ],
+        [ '"pop!!15-20!!divorced"', '"3.5"', '"45.8"' ]
+      ],"Clearing one cell was not as expected.")
     log("Clearing one cell was as expected","green");
     let clearStringAndReg = util.clear(csvArray, ['"',/A/g]);
     assert.deepStrictEqual(clearStringAndReg, [
@@ -164,39 +164,39 @@ try {
 // Splitting elements in an array into arrays
     let splitDefault = util.toArray(csvArray);
     assert.deepStrictEqual(splitDefault, [
-        [ [ 'geo' ], '"id001"', '"id002' ],
-        [ [ 'name' ], 'AK', '"AL"' ],
-        [ [ 'pop' ], '"100"', '"1000' ],
-        [ [ 'pop', '15-20' ], '"20"', '"200"' ],
-        [ [ 'pop', '15-20', 'divorced' ], '"3.5"', '"45.8"' ] 
-    ],"Expected all of first column to be split arrays")
+        [ [ '"geo"' ], '"id001"', '"id002' ],
+        [ [ '""name"' ], '"AK"', '"AL"' ],
+        [ [ '"pop"' ], '"100"', '"1000' ],
+        [ [ '""pop', '15-20"' ], '"20"', '"200"' ],
+        [ [ '"pop', '15-20', 'divorced"' ], '"3.5"', '"45.8"' ]
+      ],"Expected all of first column to be split arrays")
     log("Splitting the first column into arrays was as expected","green")
     let multipleSplit = util.toArray(csvArray, ['-',/\./g ], -1, -1);
     assert.deepStrictEqual(multipleSplit, [
-        [ [ 'geo' ], [ '"id001"' ], [ '"id002' ] ],
-        [ [ 'name' ], [ 'AK' ], [ '"AL"' ] ],
-        [ [ 'pop' ], [ '"100"' ], [ '"1000' ] ],
-        [ [ 'pop!!15', '20' ], [ '"20"' ], [ '"200"' ] ],
-        [ [ 'pop!!15', '20!!divorced' ], [ '"3', '5"' ], [ '"45', '8"' ] ]
-    ],"Expected all values to be split on '.'(literal) and '-'");
+        [ [ '"geo"' ], [ '"id001"' ], [ '"id002' ] ],
+        [ [ '""name"' ], [ '"AK"' ], [ '"AL"' ] ],
+        [ [ '"pop"' ], [ '"100"' ], [ '"1000' ] ],
+        [ [ '""pop!!15', '20"' ], [ '"20"' ], [ '"200"' ] ],
+        [ [ '"pop!!15', '20!!divorced"' ], [ '"3', '5"' ], [ '"45', '8"' ] ]
+      ],"Expected all values to be split on '.'(literal) and '-'");
     log('splitting on multiple expressions worked as expected','green')
     let split3rdColOnZerosAndPeriods = util.toArray(csvArray, ['0',/\./], -1,2);
     assert.deepStrictEqual(split3rdColOnZerosAndPeriods, [
-        [ 'geo', '"id001"', [ '"id', '', '2' ] ],
-        [ 'name', 'AK', [ '"AL"' ] ],
-        [ 'pop', '"100"', [ '"1', '', '', '' ] ],
-        [ 'pop!!15-20', '"20"', [ '"2', '', '"' ] ],
-        [ 'pop!!15-20!!divorced', '"3.5"', [ '"45', '8"' ] ]
-    ],"Expected 3rd col to be split on zeros and periods");
+        [ '"geo"', '"id001"', [ '"id', '', '2' ] ],
+        [ '""name"', '"AK"', [ '"AL"' ] ],
+        [ '"pop"', '"100"', [ '"1', '', '', '' ] ],
+        [ '""pop!!15-20"', '"20"', [ '"2', '', '"' ] ],
+        [ '"pop!!15-20!!divorced"', '"3.5"', [ '"45', '8"' ] ]
+      ],"Expected 3rd col to be split on zeros and periods");
     log('splitting 3rd col on zeros and periods worked as expected','green')
 
 // Chaining properties into objects
     const propChain = ["depth1","depth2","depth3"];
-    let propTestSingle = util.chainSingle("value", "nestedVal",{});
-    assert(propTestSingle.value == "nestedVal", "Expected a string to chain depth 1 into object properties");
-    log("Chaining a string to a single object worked as expected","green")
-    let propTestChain = util.chainSingle(propChain, "nestedVal", {});
-    assert.deepStrictEqual(propTestChain, { depth1: { depth2: { depth3: 'nestedVal' } } },"Expected 3 nested properties")
+    let propTestSingle = util.chainSingle('key', "value", {});
+    assert.deepStrictEqual(propTestSingle,{ key: 'value' },'Chaining string didnt next as expected.');
+    log('Chaining string nested as expected.','green');
+    let propTestChain = util.chainSingle(propChain, "val", {});
+    assert.deepStrictEqual(propTestChain, { depth1: { depth2: { depth3: 'val' } } },"Expected 3 nested properties")
     log("Chaining an array to a single object worked as expected","green");
     const propsArray = [
         ["prop1","subprop1"],
@@ -216,6 +216,23 @@ try {
             }}
     },"Expected object with 2 nested property chains")
     log("Chaining multiple props and vals to a single object worked as expected","green");
+    const propsArr2 = [
+        ["State"],
+        ["Total","Population 15 years and over"],
+        ["Total","Population 15 years and over","Males 15 years and older"],
+    ];
+    const valsArr2 = ["WI","15,000","5,000"];
+    let propsTest2 = util.chainMultiple(propsArr2,valsArr2,{},true);
+    assert.deepStrictEqual(propsTest2, {
+        State: "WI",
+        Total: {
+            "Population 15 years and over": {
+                "Population 15 years and over": "15,000",
+                "Males 15 years and older": "5,000"
+            }
+        }
+    })
+    log('Chaining with identically named properties, one with a val, one with a nest, worked as expected','true');
 
 //rotations - get column, rotate array
     const rotArr = [

@@ -21,5 +21,78 @@ A section of geograph data downloaded from the census website might look like th
 | "0400000US08" | "Colorado"             | "4720810"                                       | "2634"                                                 | "2372402"                                                                             | "4047"                                                                                       |
 | "0400000US09" | "Connecticut"          | "2975029"                                       | "1595"                                                 | "1441236"                                                                             | "2275"                                                                                       |
 
-
-_to be continued..._
+And we want the output to look like this:
+```
+{
+    "Alabama": {
+        "Total": {
+            "Population 15 years and over": {
+                "Population 15 years and over": 3955,
+                "AGE AND SEX": {
+                    "Males 15 years and over": 1909410
+                }
+            }
+        }
+    },
+    "Alaska": {
+        "Total": {
+            "Population 15 years and over": {
+                "Population 15 years and over": 856,
+                "AGE AND SEX": {
+                    "Males 15 years and over": 301975
+                }
+            }
+        }
+    },
+    "Arizona": {
+        "Total": {
+            "Population 15 years and over": {
+                "Population 15 years and over": 1614,
+                "AGE AND SEX": {
+                    "Males 15 years and over": 2926106
+                }
+            }
+        }
+    },
+    "Arkansas": {
+        "Total": {
+            "Population 15 years and over": {
+                "Population 15 years and over": 2922,
+                "AGE AND SEX": {
+                    "Males 15 years and over": 1181259
+                }
+            }
+        }
+    },
+    "California": {
+        "Total": {
+            "Population 15 years and over": {
+                "Population 15 years and over": 4693,
+                "AGE AND SEX": {
+                    "Males 15 years and over": 15865087
+                }
+            }
+        }
+    },
+    "Colorado": {
+        "Total": {
+            "Population 15 years and over": {
+                "Population 15 years and over": 2634,
+                "AGE AND SEX": {
+                    "Males 15 years and over": 2372402
+                }
+            }
+        }
+    },
+    "Connecticut": {
+        "Total": {
+            "Population 15 years and over": {
+                "Population 15 years and over": 1595,
+                "AGE AND SEX": {
+                    "Males 15 years and over": 1441236
+                }
+            }
+        }
+    }
+}
+```

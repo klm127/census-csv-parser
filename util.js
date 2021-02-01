@@ -238,17 +238,39 @@ exports.toArray = function(arr2d, find='!!', rowInd=-1, colInd=0) {
  * @memberof util
  */
 exports.chainSingle = function(arr1d, val, obj={}, mutate=true) {
-    if(!mutate) {
-        obj = deepCopySimple(obj);
-    }
-    if(typeof arr1d == "string") {
-        obj[arr1d] = val;
-    }
-    else if(arr1d.length == 1) {
-        obj[arr1d[0]] = val;
+    if(!mutate) {obj=deepCopySimple(obj);} //copy the object if we aren't supposed to mutate
+    let prop = (arr1d instanceof Array) ? arr1d[0] : arr1d;
+    let hasAlreadyProp = obj.hasOwnProperty(prop);
+    let hasAlreadyFinalProp = hasAlreadyProp && !(obj[prop] instanceof Object);
+    let haveMorePropsToAssign = arr1d.length > 1 && typeof arr1d != "string";
+    if(hasAlreadyProp) {
+        if(hasAlreadyFinalProp) {
+            if(haveMorePropsToAssign) { //duplicate and move old prop down - it must be a total type prop
+                let oldval = obj[prop];
+                obj[prop] = {};
+                obj[prop][prop] = oldval;
+                arr1d = arr1d.slice(1);
+                obj[prop] = exports.chainSingle(arr1d,val,obj[prop],mutate)
+
+            }
+            else { //reassign if duplicate mapping
+                obj[prop] = val;
+            }
+        }
+        else{ //move into without re-assigning if we have more to go down
+            arr1d = arr1d.slice(1);
+            obj[prop] = exports.chainSingle(arr1d,val,obj[prop],mutate);
+        }
     }
     else {
-        obj[arr1d[0]] = exports.chainSingle(arr1d.slice(1), val, obj[arr1d[0]]); //recursion for nested
+        if(haveMorePropsToAssign) { //create new sub-obj if it doesnt exist and we have more to assign, and recurse
+            arr1d = arr1d.slice(1);
+            obj[prop] = {};
+            obj[prop] = exports.chainSingle(arr1d,val,obj[prop],mutate)
+        }
+        else { //if we have no more props to assign, assign here
+            obj[prop] = val;
+        }
     }
     return obj;
 }
@@ -261,7 +283,7 @@ exports.chainSingle = function(arr1d, val, obj={}, mutate=true) {
  * @returns {Object}- the parent object with the new properties chain, or a semi-deep clone of the parent object with the new properties chain if mutate is set to true.
  * @memberof util
  */
-exports.chainMultiple = function(arr2d, vals, parentobj={}, mutate=true) {
+function chainMultiple(arr2d, vals, parentobj={}, mutate=true) {
     if(!mutate) {
         parentobj = deepCopySimple(parentobj);
     }
@@ -331,3 +353,5 @@ exports.numerify = function numerify(arr) {
 function deepCopySimple(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
+
+exports.chainMultiple = chainMultiple;

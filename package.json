@@ -5,8 +5,10 @@
   "main": "parser.js",
   "scripts": {
     "test": "node ./tests/testutils.js && node ./tests/testparser.js",
+    "test-util": "node ./tests/testutils.js",
     "document-docdash": "jsdoc . -t ./node_modules/docdash -R README.md",
-    "document-clean": "jsdoc . -t ./node_modules/clean-jsdoc-theme -d ./doc/"
+    "document-clean": "jsdoc . -t ./node_modules/clean-jsdoc-theme -d ./doc/ -R README.md",
+    "document": "jsdoc . -d ./doc/ -R README.md"
   },
   "keywords": [
     "census",
