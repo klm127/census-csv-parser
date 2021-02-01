@@ -1,6 +1,6 @@
 {
   "name": "census-csv-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "tool for parsing census csvs into .json objects",
   "main": "parser.js",
   "scripts": {
@@ -22,8 +22,5 @@
     "url": "https://github.com/klm127/census-csv-parser.git"
   },
   "dependencies": {
-    "clean-jsdoc-theme": "^3.0.6",
-    "docdash": "^1.2.0",
-    "jsdoc-baseline": "https://github.com/hegemonic/baseline/tarball/master"
   }
 }
