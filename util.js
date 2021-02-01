@@ -143,7 +143,7 @@ exports.chopColumn = function(arr, find, regIndex = 0) {
  * @memberof util
  */
 exports.clear = function(arr, find='"', rowInd=-1, colInd=-1) {
-    arr = [...arr]; //prevent mutation with duplication
+    arr = deepCopySimple(arr);
     if(typeof find == "string") {
         find = new RegExp(find, 'g'); //when passed a string, all instances of that string will be replaced, so global flag is set.
     }

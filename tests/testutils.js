@@ -1,6 +1,6 @@
 const assert = require('assert')
-const util = require('./util.js')
-const log = require('./logger.js')
+const util = require('../util.js')
+const log = require('../logger.js')
 
 const csvtext = '"geo","id001","id002\n"'+
                     '"name","AK","AL"\n'+

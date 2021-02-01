@@ -1,6 +1,6 @@
 const assert = require('assert')
-const Parser = require('./parser.js')
-const log = require('./logger.js');
+const Parser = require('../parser.js')
+const log = require('../logger.js');
 const { AssertionError } = require('assert');
 
 
