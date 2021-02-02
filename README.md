@@ -49,7 +49,7 @@ And we want the output to look like this:
     "Alabama": {
         "Total": {
             "Population 15 years and over": {
-                "Population 15 years and over": 3955,
+                "Population 15 years and over": 4004468,
                 "AGE AND SEX": {
                     "Males 15 years and over": 1909410
                 }
@@ -59,7 +59,7 @@ And we want the output to look like this:
     "Alaska": {
         "Total": {
             "Population 15 years and over": {
-                "Population 15 years and over": 856,
+                "Population 15 years and over": 578225,
                 "AGE AND SEX": {
                     "Males 15 years and over": 301975
                 }
@@ -69,7 +69,7 @@ And we want the output to look like this:
     "Arizona": {
         "Total": {
             "Population 15 years and over": {
-                "Population 15 years and over": 1614,
+                "Population 15 years and over": 5919085,
                 "AGE AND SEX": {
                     "Males 15 years and over": 2926106
                 }
@@ -79,7 +79,7 @@ And we want the output to look like this:
     "Arkansas": {
         "Total": {
             "Population 15 years and over": {
-                "Population 15 years and over": 2922,
+                "Population 15 years and over": 2439812,
                 "AGE AND SEX": {
                     "Males 15 years and over": 1181259
                 }
@@ -89,7 +89,7 @@ And we want the output to look like this:
     "California": {
         "Total": {
             "Population 15 years and over": {
-                "Population 15 years and over": 4693,
+                "Population 15 years and over": 32124112,
                 "AGE AND SEX": {
                     "Males 15 years and over": 15865087
                 }
@@ -99,7 +99,7 @@ And we want the output to look like this:
     "Colorado": {
         "Total": {
             "Population 15 years and over": {
-                "Population 15 years and over": 2634,
+                "Population 15 years and over": 4720810,
                 "AGE AND SEX": {
                     "Males 15 years and over": 2372402
                 }
@@ -109,7 +109,7 @@ And we want the output to look like this:
     "Connecticut": {
         "Total": {
             "Population 15 years and over": {
-                "Population 15 years and over": 1595,
+                "Population 15 years and over": 2975029,
                 "AGE AND SEX": {
                     "Males 15 years and over": 1441236
                 }

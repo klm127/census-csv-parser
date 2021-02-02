@@ -30,7 +30,7 @@ const outputPath = "./json_results/maritaldataSmall.json";
     arr = util.chopColumn(arr,0); //chop off top column
     arr = util.clear(arr); //clear quotation marks(default value)
     arr = util.numerify(arr); //convert values to numbers where possible
-    arr = util.clear(arr,/Margin of Error!!/); //clear unwanted text
+    arr = util.chop(arr,/Margin of Error!!/); //chop all margin of error rows, we dont want that data
     arr = util.clear(arr,/Estimate!!/); //clear unwanted text
     let parser = new Parser(arr); //create new parser and load it with array
     parser.setHeaders(0,0); //set the header row and columns
@@ -52,7 +52,7 @@ async function example(){
     arr = util.chopColumn(arr,0);
     arr = util.clear(arr);
     arr = util.numerify(arr);
-    arr = util.clear(arr,/Margin of Error!!/);
+    arr = util.chop(arr,/Margin of Error!!/);
     arr = util.clear(arr,/Estimate!!/);
     let parser = new Parser(arr);
     parser.setHeaders(0,0);
