@@ -1,0 +1,54 @@
+/** reference in original CSV
+ * 
+ * 
+
+ Noticed the problem occurs with splitting csv.
+
+ There's an extra coma in this header:
+Estimate!!Total!!Population 15 years and over!!RACE AND HISPANIC OR LATINO ORIGIN!!White alone, not Hispanic or Latino
+
+
+
+ * Col AY
+ * Estimate!!Total!!Population 15 years and over!!RACE AND HISPANIC OR LATINO ORIGIN!!Hispanic or Latino origin (of any race)
+    Alabama: 146090
+    CSV: 146090
+ Col BA
+ Estimate!!Total!!Population 15 years and over!!RACE AND HISPANIC OR LATINO ORIGIN!!White alone, not Hispanic or Latino
+    Alabama: 2678631
+    CSV: 2678631
+
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * Column BD: Estimate!!Total!!LABOR FORCE PARTICIPATION!!Males 16 years and over
+    Alabama: 1874352
+    Transposed CSV: 1193995
+
+* column BE: Estimate!!Total!!LABOR FORCE PARTICIPATION!!Males 16 years and over!!In labor force
+    Alabama: 1193995
+    Transposed CSV: 2063101
+
+ * Column BG: Estimate!!Total!!LABOR FORCE PARTICIPATION!!Females 16 years and over
+    Alabama: 2063101
+    Transposed CSV: 1087987
+
+ * Column BI: Estimate!!Total!!LABOR FORCE PARTICIPATION!!Females 16 years and over!!In labor force
+    Alabama: 1087987
+    Transposed CSV: 5.2
+
+ *  Column BK: Estimate!!Total!!PERCENT ALLOCATED!!Marital status
+    Alabama: 5.2
+    Transposed CSV: 47.6
+
+ Column BM: Estimate!!Now married (except separated)!!Population 15 years and over
+    Alabama: 47.6
+    Transposed CSV: 49.9
+
+
+ * */

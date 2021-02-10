@@ -354,7 +354,25 @@ function numerify(arr) {
 function deepCopySimple(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
+/**
+ * Converts array to a CSV style string
+ * @param {Array[]} arr the array to convert to a string
+ * @param {string} [colDelim=','] the string to delimit columns
+ * @param {string} [rowDelim='\n'] the string to delimit rows
+ * @todo write unit tests?
+ * @returns {string} a csv-style string
+ */
+function convertArrToCSV(arr,colDelim=',',rowDelim='\n') {
+    let newstring = '';
+    arr.forEach( (row,iteration) => {
+        let partialstring = row.join(colDelim);
+        newstring += partialstring;
+        newstring += (iteration <= arr.length-1) ? rowDelim : ''
+    })
+    return newstring;
+}
 
+exports.convertArrToCSV = convertArrToCSV;
 exports.chainMultiple = chainMultiple;
 exports.csvArray = csvArray;
 exports.chop = chop;
