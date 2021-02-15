@@ -361,6 +361,7 @@ function deepCopySimple(obj) {
  * @param {string} [rowDelim='\n'] the string to delimit rows
  * @todo write unit tests?
  * @returns {string} a csv-style string
+ * @memberof util
  */
 function convertArrToCSV(arr,colDelim=',',rowDelim='\n') {
     let newstring = '';
