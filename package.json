@@ -23,8 +23,7 @@
     "type": "git",
     "url": "https://github.com/klm127/census-csv-parser.git"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "minami": "^1.2.3"
   }

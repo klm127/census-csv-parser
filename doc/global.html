@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>example.js - Documentation</title>
+    <title>Global - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,81 +29,364 @@
 
 <div id="main">
     
-    <h1 class="page-title">example.js</h1>
+    <h1 class="page-title">Global</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @namespace Example
- */
+        <h2>
+        
+        </h2>
+        
+    
+</header>
 
-const Parser = require('./parser')
-const util = require('./util')
-const fs = require('fs').promises;
+<article>
+    <div class="container-overview">
+    
+        
 
-const inputPath = "./test_data/maritaldataLarge.csv";
-const outputPath = "./json_results/maritaldataLarge.json";
+        
 
-/**
- * An example of using this library to parse a .csv into a mapped .json
- * @memberof! Example
- * @see {@link https://github.com/klm127/census-csv-parser/tree/master/test_data | input csvs on Github} for example inputs.
- * @see {@link https://github.com/klm127/census-csv-parser/tree/master/json_results | output .jsons on Github } for example outputs.
- * @example &lt;caption>Example.js - using fs to write files and census-csv-parser members to process census data&lt;/caption>
- * 
-async function example(){
-    const content = await fs.readFile(inputPath,'utf8');
-    let arr = util.csvArray(content,/","/);
-    arr = util.transpose(arr);
-    arr = util.chop(arr,/Margin of Error!!/,-1);
-    arr = util.chopColumn(arr,0);
-    arr = util.clear(arr,/Estimate!!/);
-    arr = util.chop(arr, 0);
-    arr = util.clear(arr);
-    arr = util.numerify(arr);
-    let parser = new Parser(arr);
-    parser.setHeaders(0,0);
-    parser.setProps('row');
-    parser.propsToArray(/!!/);
-    let json = parser.mapProps();
-    json = JSON.stringify(json);
-    await fs.writeFile(outputPath,json).catch((e)=> {console.log('error writing file'); console.log(e);})
 
-}
-example().catch( (ex) => {
-    console.log(`error!\n${ex}`)
-})
- */
-async function example(){
-    const content = await fs.readFile(inputPath,'utf8');
-    let arr = util.csvArray(content,/","/);
-    arr = util.transpose(arr);
-    arr = util.chop(arr,/Margin of Error!!/,-1);
-    arr = util.chopColumn(arr,0);
-    arr = util.clear(arr,/Estimate!!/);
-    arr = util.chop(arr, 0);
-    arr = util.clear(arr);
-    arr = util.numerify(arr);
-    let parser = new Parser(arr);
-    parser.setHeaders(0,0);
-    parser.setProps('row');
-    parser.propsToArray(/!!/);
-    let json = parser.mapProps();
-    json = JSON.stringify(json);
-    await fs.writeFile(outputPath,json).catch((e)=> {console.log('error writing file'); console.log(e);})
+<dl class="details">
 
-}
-example().catch( (ex) => {
-    console.log(`error!\n${ex}`)
-})</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="convertArrToCSV"><span class="type-signature"></span>convertArrToCSV<span class="signature">(arr, colDelim<span class="signature-attributes">opt</span>, rowDelim<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Converts array to a CSV style string
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util.js.html">util.js</a>, <a href="util.js.html#line365">line 365</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>write unit tests?</li>
+        </ul>
+    </dd>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>arr</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Array.&lt;Array></code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                the array to convert to a string
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>colDelim</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ','
+                
+                </td>
+            
+
+            <td class="description last">
+                the string to delimit columns
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rowDelim</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    '\n'
+                
+                </td>
+            
+
+            <td class="description last">
+                the string to delimit rows
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>string</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    a csv-style string
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
