@@ -4,13 +4,13 @@
 /**
  * Parses csv into a 2-dimensional array. By default, also trims rows and columns left by trailing delimiters.
  * @param {string} csvtext - A csv string
- * @param {string} [delim=','] - The value delimiter
+ * @param {string} [delim='","'] - The value delimiter
  * @param {string} [row_delim='\n'] - The row delimiter
  * @param {boolean} [trim=true] - Trims empty trailing rows and empty trailing elements in rows
  * @returns {Array} - A 2-dimensional array, with each sub-array representing rows.
  * @memberof util
  */
-function csvArray(csvtext, delim=',',rowdelim='\n',trim=true) {
+function csvArray(csvtext, delim='","',rowdelim='\n',trim=true) {
     let arr = csvtext.split(rowdelim);
     let sum = 1;
     arr = arr.map( (row) => { 
