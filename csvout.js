@@ -17,6 +17,7 @@ async function example(){
     arr = util.clear(arr,/Estimate!!/);
     arr = util.chop(arr, 0);
     arr = util.clear(arr);
+    arr = util.numerify(arr);
     let str = util.convertArrToCSV(arr);
 
     await fs.writeFile(csvOut,str).catch((e)=> {console.log('error writing csv file'); console.log(e);})
