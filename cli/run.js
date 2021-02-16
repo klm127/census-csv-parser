@@ -1,3 +1,3 @@
 cli = require('./cli.js')
 
-commandLine = new cli();
+const commandLine = new cli();

@@ -1,7 +1,11 @@
-const log = require('../logger.js')
-const util = require('../util.js')
-const parser = require('../parser.js')
-const fs = require('fs').promises;
+const logger = require('../logger.js')
+const state = require('./state.js')
+const readline = require('readline')
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+})
 
 class csvCli {
 
@@ -10,36 +14,23 @@ class csvCli {
      * Creates a command line interface for executing cli commands
      */
     constructor() {
-        this.state = this.initialState;
-        this.loadPath = null;
-        this.savePath = null;
-        this.dataArray = null;
-        this.parser = null;
-        while( this.state != null ) {
-            this.state = this.state();
-        }
-        log('thank you for using census csv parser','blue')
+        this.state = new state.InitialState(this);
     }
-
-    initialState() {
-        log(' census-csv-parser command line interface initialized.','cyan')
-        this.logStatus();
-        log(' Type help to see commands. ', 'cyan')
-        return null;
+    async run() {
+        await this.state.run();
     }
-    logStatus() {
-        let logString = "";
+    async getInput() {
+        await rl.question('> ', (data) => {
+            this.state.execute(data);
+            rl.close();
+        })
     }
-
-    //get help
-
-    //save config
-
-    //load config
-
-    //states - column set, row set, parser ready
-
-
+    log(text,color) {
+        logger(text,color);
+    }
+    exit() {
+        process.exit();
+    }
 }
 
 module.exports = csvCli;
