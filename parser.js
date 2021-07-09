@@ -178,3 +178,4 @@ class Parser {
 }
 
 module.exports = Parser;
+exports.util = util;

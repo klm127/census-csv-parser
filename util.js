@@ -10,19 +10,17 @@
  * @returns {Array} - A 2-dimensional array, with each sub-array representing rows.
  * @memberof util
  */
-function csvArray(csvtext, delim='","',rowdelim='\n',trim=true) {
-    let arr = csvtext.split(rowdelim);
-    let sum = 1;
+function csvArray(csvtext, delim=',',rowdelim='\n',trim=true) {
+    let arr = csvtext.split(rowdelim);  // split on newline or other row delimiter
     arr = arr.map( (row) => { 
-        let r = row.split(delim); 
-        sum+= r.length;
+        let r = row.split(delim); // split each row into columns
         return r;
     });
     if(trim == true) {
         if(csvtext[csvtext.length-1]==rowdelim) {
-            arr = arr.slice(0,arr.length-1); // trim bottom row if csv ends in a row delimiter
+            arr = arr.slice(0,arr.length-1); // trim off bottom row if csv ends in a row delimiter
         }
-        let sum = 0;
+        let sum = 1;
         arr.forEach( (row)=> sum+= row.length);
         let avg = sum/arr.length-1;
         arr = arr.map( (row) => row.filter( (el,ind)=> ind<avg )) //trim cols past avg max index
@@ -34,10 +32,11 @@ function csvArray(csvtext, delim='","',rowdelim='\n',trim=true) {
  * @param {Array[]} arr - the 2-dimensional array to operate on
  * @param {(number | number[] | RegExp) } find The row index to remove, an array of row indexes to remove, or a regular expression. If a regular expression is passed, all rows that match the regex will be removed. Numbers may be negative to operate from the end.
  * @param {number} [regindex=0] The **column** index to search when using regular expressions. Defaults to the first column, index 0, as the typical use case would be to remove rows corresponding to unwanted data categories. If set to -1, chop will search the entire array for the regex, and whenever it finds a match, it will delete the entire row on which it was found.
+ * @param {boolean} [keepFirst=false] If set to true, Chop will ignore the first row of the .csv, which is often the header row when doing RegEx based searches.
  * @returns {Array} - A 2-dimensional array, possibly with some rows removed.
  * @memberof util
  */
-function chop(arr, find, regIndex = 0) {
+function chop(arr, find, regIndex = 0, keepFirst=false) {
     if(typeof find == 'number') { //remove 1 row
         //remove a single row
         if(find < 0) {
@@ -51,8 +50,14 @@ function chop(arr, find, regIndex = 0) {
         return [...arrFront,...arrBack];
     }
     else if(Array.isArray(find)) { //remove all rows in array
+        if(keepFirst) {
+            let header = deepCopySimple(arr[0]);
+        }
         find = find.filter( (el)=> typeof el == 'number').sort( (a,b)=> b-a); //remove numbers, sort DESC
         find.forEach( (n) => { arr = chop(arr, n)}) //recursion!
+        if(keepFirst) {
+            arr.unshift(header);
+        }
         return arr;
     }
     else if(find instanceof RegExp) { //remove all rows that match regex
@@ -73,8 +78,8 @@ function chop(arr, find, regIndex = 0) {
                     matchrows.push(ind);
                 }
             });
-        }        
-        return chop(arr, matchrows, regIndex)
+        }
+        return chop(arr, matchrows, regIndex, keepFirst)
     }
     return arr; //if wrong find type was passed, just give back the array
 }
