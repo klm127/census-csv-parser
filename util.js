@@ -50,12 +50,13 @@ function chop(arr, find, regIndex = 0, keepFirst=false) {
         return [...arrFront,...arrBack];
     }
     else if(Array.isArray(find)) { //remove all rows in array
+        let header = null;
         if(keepFirst) {
-            let header = deepCopySimple(arr[0]);
+            header = deepCopySimple(arr[0]);
         }
         find = find.filter( (el)=> typeof el == 'number').sort( (a,b)=> b-a); //remove numbers, sort DESC
         find.forEach( (n) => { arr = chop(arr, n)}) //recursion!
-        if(keepFirst) {
+        if(keepFirst && find[find.length-1] == 0) {
             arr.unshift(header);
         }
         return arr;
@@ -88,9 +89,10 @@ function chop(arr, find, regIndex = 0, keepFirst=false) {
  * @param {*} arr A 2 dimensional array to operate on. Rows should be **equal length**
  * @param {(number | number[] | RegExp)} find The column index to remove, an array of column indexes to remove, or a regular expression. If a regular expression is passed _all_ columns that match on the RegIndex row will be removed. Negative numbers will operate from the last column backwards. 
  * @param {number} [regIndex=0] The **row** index to search when using regular expressions as the find parameter. Defaults to first row, index 0, as the typical use case would be to remove columns representing unwanted data, and column headers are usually located at row 0. If set to -1, chopColumn will search the entire array for a regex, and whenever it finds a match, it will delete the entire column on which it was found.
+ * @param {boolean} [keepFirst=false] If set to true, chopColumn will ignore the first column of the .csv, which is often the header row when doing RegEx based searches.
  * @memberof util
  */
-function chopColumn(arr, find, regIndex = 0) {
+function chopColumn(arr, find, regIndex = 0, keepFirst = false) {
     let height = arr.length;
     let width = arr[0].length;
     let newArr = [];
@@ -114,6 +116,9 @@ function chopColumn(arr, find, regIndex = 0) {
     else if(find instanceof Array) { //remove all columns in find array
         newArr = arr;
         find = find.filter( (el)=> typeof el == 'number').sort( (a,b)=> b-a); //remove numbers, sort DESC
+        if(keepFirst && find[find.length-1] == 0 ) {
+            find.pop();
+        }
         find.forEach( (n) => {newArr = chopColumn(newArr,n,regIndex)})
     }
     else if(find instanceof RegExp) { //remove all columns that match regex
@@ -135,7 +140,7 @@ function chopColumn(arr, find, regIndex = 0) {
             })
         }
         newArr = arr;
-        newArr = chopColumn(newArr,matchcols,regIndex);
+        newArr = chopColumn(newArr,matchcols,regIndex,keepFirst);
     }
     return newArr;
 }

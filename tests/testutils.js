@@ -259,6 +259,32 @@ try {
         [ 'pop!!15-20!!divorced', 3.5, 45.8 ]
       ],"Numerifying array did not work as expected");
     log('Numerifying array worked as expected','green')
+//chop row but keep header
+    let keepHeader = util.chop(csvArray, /\d\d\d/, 1, true);
+    assert.deepStrictEqual(keepHeader, [
+        [ '"geo"', '"id001"', '"id002"' ],
+        [ '"name"', '"AK"', '"AL"' ],
+        [ '"pop!!15-20"', '"20"', '"200"' ],
+        [ '"pop!!15-20!!divorced"', '"3.5"', '"45.8"' ]
+      ], "Keeping headers on chop (row) did not work as expected.")
+    log('Keeping headers on chop (row) worked as expected.','green')
+    let keepHeaderNoHeaderMatch = util.chop(csvArray, /AK/, -1, true);
+    assert.deepStrictEqual(keepHeaderNoHeaderMatch, [
+        [ '"geo"', '"id001"', '"id002"' ],
+        [ '"pop"', '"100"', '"1000"' ],
+        [ '"pop!!15-20"', '"20"', '"200"' ],
+        [ '"pop!!15-20!!divorced"', '"3.5"', '"45.8"' ]
+      ], "Non-duplicating tow row did not work as expected")
+    log('Not duplicating top row on regex keepheader chop worked as expected,','green')
+    let keepHeaderColumn = util.chopColumn(csvArray, /20\b/, 3, true);
+    assert.deepStrictEqual(keepHeaderColumn, [
+        [ '"geo"', '"id002"' ],
+        [ '"name"', '"AL"' ],
+        [ '"pop"', '"1000"' ],
+        [ '"pop!!15-20"', '"200"' ],
+        [ '"pop!!15-20!!divorced"', '"45.8"' ]
+      ], "Test of header row re-insertion failed")
+    log('Keeping header column worked as expected', 'green')
 
 
 
