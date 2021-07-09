@@ -42,7 +42,9 @@ class Parser {
         /**
          * Contains metadata of properties that will be added to the top level JSON object.
          */
-        this.metadata = {};
+        this.metadata = {
+            overlapHeader: "None"
+        };
     }
     /**
      * Clears unwanted characters from data array or a portion of that array
@@ -76,8 +78,7 @@ class Parser {
         if(rowIndex < 0 || rowIndex > this.data.length-1) {
             return;
         }
-        this.columnHeaders = this.data[rowIndex].slice(1);
-        this.data = util.chop(this.data,rowIndex);
+        this.columnHeaders = this.data[rowIndex].slice(0); // columnHeaders are a row
         if(columnIndex < 0) {
             columnIndex = this.data.length + columnIndex;
         }
@@ -87,7 +88,11 @@ class Parser {
         if(columnIndex < 0 || columnIndex > this.data.length-1) {
             return;
         }
+        this.metadata.overlapHeader = this.data[rowIndex][columnIndex];
         this.rowHeaders = util.getColumn(this.data,columnIndex);
+        this.rowHeaders = this.rowHeaders.filter( (el,index) => index != rowIndex)
+        this.columnHeaders = this.columnHeaders.filter( (el,index)=> {return index != columnIndex} )
+        this.data = util.chop(this.data,rowIndex);
         this.data = util.chopColumn(this.data, columnIndex);
     }
     /**
@@ -95,11 +100,11 @@ class Parser {
      * @param {string} str A string of either 'ROW' or 'COL' - Parser initializes with this set to ROW. A string other than these will do nothing.
      */
     setProps(str) {
-        if(str.toUpperCase == "ROW") {
-            this.propArr = str.toUpperCase;
+        if(str.toUpperCase() == "ROW") {
+            this.propArr = "ROW";
         }
-        else if(str.toUpperCase == "COL") {
-            this.propArr = str.toUpperCase;
+        else if(str.toUpperCase() == "COL") {
+            this.propArr = "COL";
         }
     }
     /**
@@ -167,12 +172,22 @@ class Parser {
         }
         let parentObj = JSON.parse(JSON.stringify(this.metadata)); //simple deep copy;
         objsArr = JSON.parse(JSON.stringify(objsArr));
-        objsArr.forEach((el,i)=> {
-            let data = util.getColumn(this.data,i);
-            let o = {};
-            o = util.chainMultiple(propsArr,data,o,true);
-            parentObj[el] = o;
-        });
+        if(this.propArr == "ROW") {
+            objsArr.forEach((el,i)=> {
+                let data = util.getColumn(this.data,i);
+                let o = {};
+                o = util.chainMultiple(propsArr,data,o,true);
+                parentObj[el] = o;
+            });
+        }
+        else {
+            objsArr.forEach( (el, index)=> {
+                let data = this.data[index];
+                let o = {};
+                o = util.chainMultiple(propsArr, data, o, true);
+                parentObj[el] = o;
+            } )
+        }
         return parentObj;
     }
 }
