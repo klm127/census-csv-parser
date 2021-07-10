@@ -191,5 +191,5 @@ class Parser {
     }
 }
 
-module.exports = Parser;
+exports.Parser = Parser;
 exports.util = util;

@@ -15,7 +15,11 @@ const outputPath = "./json_results/maritaldataLarge.json";
  * @see {@link https://github.com/klm127/census-csv-parser/tree/master/test_data | input csvs on Github} for example inputs.
  * @see {@link https://github.com/klm127/census-csv-parser/tree/master/json_results | output .jsons on Github } for example outputs.
  * @example <caption>Example.js - using fs to write files and census-csv-parser members to process census data</caption>
- * 
+
+const csv = require('census-csv-parser');
+const Parser = csv.Parser;
+const util = csv.util;
+
 async function example(){
     const content = await fs.readFile(inputPath,'utf8'); // get the raw text
     let arr = util.csvArray(content,/","/); // turn text to csv

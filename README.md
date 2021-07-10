@@ -1,6 +1,6 @@
 # census-csv-parser
 
-_v 1.0.2_
+_v 1.0.3_
 
 [https://github.com/klm127/census-csv-parser](https://github.com/klm127/census-csv-parser)
 
