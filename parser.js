@@ -157,7 +157,6 @@ class Parser {
      *                 }
      *          }
      * }
-     * @todo implement functionality for setting column headers as the props column
      */
     mapProps() {
         let propsArr = [];

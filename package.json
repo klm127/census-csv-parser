@@ -1,6 +1,6 @@
 {
   "name": "census-csv-parser",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "tool for parsing census csvs into .json objects",
   "homepage": "https://quaffingcode.com",
   "main": "parser.js",

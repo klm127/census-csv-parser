@@ -1,5 +1,7 @@
 # census-csv-parser
 
+_v 1.0.2_
+
 [https://github.com/klm127/census-csv-parser](https://github.com/klm127/census-csv-parser)
 
 ## Description
@@ -19,6 +21,8 @@ This code aims to be thoroughly documented. If you are viewing this readme on NP
 
 [Available here](https://quaffingcode.com/census-csv-parser/doc/index.html)
 
+To create the documentation from the GitHub repo, first run 'npm install' to install the theme dependency. Then execute, e.g., `npm run document-minami` for the minami themed documentation.
+
 ## Running
 
 - Use [Node.js](https://nodejs.org/en/)
@@ -29,6 +33,10 @@ This code aims to be thoroughly documented. If you are viewing this readme on NP
 - To access the utility functions, use `const util = require('census-csv-parser/util')`
 - To create a new parser object, `const parser = new Parser()
 - To access a util function, use, i.e. `util.csvArray(mycsvtext)`
+
+## Testing
+
+Run `npm run test` to run unit tests
 
 ## What it does
 
