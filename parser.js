@@ -192,13 +192,22 @@ class Parser {
     /**
      * Chops a row from the data array in parser. Also removes those indices from the RowHeaders.
      * @param {(number | number[] | RegExp) } find The row index to remove, an array of row indexes to remove, or a regular expression. If a regular expression is passed, all rows that match the regex will be removed. Numbers may be negative to operate from the end.
-     * @param {number} [regindex=0] The **column** index to search when using regular expressions. Defaults to the first column, index 0, as the typical use case would be to remove rows corresponding to unwanted data categories. If set to -1, chop will search the entire array for the regex, and whenever it finds a match, it will delete the entire row on which it was found.
+     * @param {number | string} [regindex=0] The **column** index to search when using regular expressions. Defaults to the first column, index 0. If a string, such as "HEADER" is passed, the row header array will be searched instead.
      * @memberof Parser
      */
     chop(find, regindex=0) {
         let arr = this.data;
         let matchrows = [];
-        if(find instanceof RegExp) { //find all rows that match
+        if(typeof regindex == 'string') {
+            if(find instanceof RegExp) {
+                this.rowHeaders.forEach( (header,index) => {
+                    if(find.test(header)) {
+                        matchrows.push(index)
+                    }
+                })
+            }
+        }
+        if(find instanceof RegExp && typeof regindex != 'string') { //find all rows that match
             if(regindex < 0) { // match all elements based on regex
                 arr.forEach( (row,rowind) => {
                     for(let i = 0; i < row.length; i++) {

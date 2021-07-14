@@ -201,6 +201,18 @@ try {
       'New York': {}
     }, 'When passing an array to parser and telling it to regex search on column names, encountered unexpected result')
     log('Chopping columns when giving parser confusing header info worked as expected','green')
+
+    
+    parser4 = new Parser(testArray2);
+    parser4.setHeaders(0,0);
+    parser4.setProps('COL');
+    parser4.chop(/Boston/,'Header');
+    assert.deepStrictEqual(parser4.mapProps(),{
+      overlapHeader: 'City',
+      'Los Angeles': { Population: '5m', 'Most Common Profession': 'Street Performer' },
+      'New York': { Population: '15m', 'Most Common Profession': 'Wall Street Banker' }
+    }, 'Chopping rows with header column worked as expected')
+    log('Chopping rows on header regex worked as expected','green')
     
 
 
