@@ -1,5 +1,6 @@
 const assert = require('assert')
-const Parser = require('../parser.js')
+const P = require('../parser.js')
+const Parser = P.Parser
 const log = require('../logger.js');
 const { AssertionError } = require('assert');
 
@@ -117,6 +118,43 @@ try {
       MA: { 'LOC-CODE': 2, POP: 500000, INCOME: 10000 }
     }, "column-mapped object didn't work as expected");
     log('column mapped object worked as expected','green')
+  // testing chop rows in parser (should remove headers also)
+    let testArray2 = [
+      ["City", "Population", "Most Common Profession"],
+      ["Boston", "1.8m", "Government Worker"],
+      ["Los Angeles", "5m", "Street Performer"],
+      ["New York", "15m", "Wall Street Banker"]
+    ];
+    let parser4 = new Parser(testArray2);
+    parser4.setHeaders(0,0);
+    parser4.setProps('COL')
+    parser4.chop(1); // remove LA _and_ row header LA
+    assert.deepStrictEqual(parser4.mapProps(), {
+      overlapHeader: 'City',
+      Boston: { Population: '1.8m', 'Most Common Profession': 'Government Worker' },
+      'New York': { Population: '15m', 'Most Common Profession': 'Wall Street Banker' }
+    }, 'Parser removed row header when chopped on a single item');
+    log('Parser chops rows and removes row headers when it does so','green')
+    parser4 = new Parser(testArray2);
+    parser4.setHeaders(0,0);
+    parser4.setProps('COL')
+    parser4.chop([1,2]);
+    assert.deepStrictEqual(parser4.mapProps(), {
+      overlapHeader: 'City',
+      Boston: { Population: '1.8m', 'Most Common Profession': 'Government Worker' },
+    }, 'Parser removed row headers when passed arrays to chop');
+    log('Parser chopped array of rows correctly','green')
+    parser4 = new Parser(testArray2);
+    parser4.setHeaders(0,0);
+    parser4.setProps('COL')
+    parser4.chop(/5m/,0); //should remove los angeles and new york
+    assert.deepStrictEqual(parser4.mapProps(), {
+      overlapHeader: 'City',
+      Boston: { Population: '1.8m', 'Most Common Profession': 'Government Worker' },
+    }, 'Parser chop did not process regex correctly');
+    log('Parser removed row headers as well as data when passed regex to chop','green');
+    
+
 
 } catch(ex) {
     if(ex instanceof AssertionError ) {

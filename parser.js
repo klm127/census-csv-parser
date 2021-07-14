@@ -189,6 +189,48 @@ class Parser {
         }
         return parentObj;
     }
+    /**
+     * Chops a row from the data array in parser. Also removes those indices from the RowHeaders.
+     * @param {(number | number[] | RegExp) } find The row index to remove, an array of row indexes to remove, or a regular expression. If a regular expression is passed, all rows that match the regex will be removed. Numbers may be negative to operate from the end.
+     * @param {number} [regindex=0] The **column** index to search when using regular expressions. Defaults to the first column, index 0, as the typical use case would be to remove rows corresponding to unwanted data categories. If set to -1, chop will search the entire array for the regex, and whenever it finds a match, it will delete the entire row on which it was found.
+     * @memberof Parser
+     */
+    chop(find, regindex=0) {
+        let arr = this.data;
+        let matchrows = [];
+        if(find instanceof RegExp) { //find all rows that match
+            if(regindex < 0) { // match all elements based on regex
+                arr.forEach( (row,rowind) => {
+                    for(let i = 0; i < row.length; i++) {
+                        if(find.test(row[i])) {
+                            matchrows.push(rowind);
+                            break;
+                        }
+                    }
+                })
+            }
+            else {
+                arr.forEach( (row, ind) => {
+                    if(find.test(row[regindex])) { //match only regindex col based on regex
+                        matchrows.push(ind);
+                    }
+                });
+            }
+        }
+        else if(find instanceof Array) {
+            matchrows = find;
+        }
+        else if(typeof find == "number") {
+            matchrows = [find];
+        }
+        matchrows = matchrows.filter( (el)=> typeof el == 'number').sort( (a,b)=> b-a); //remove non-numbers, sort DESC
+        matchrows.forEach( (el) => {
+            let rowHeadersFront = this.rowHeaders.slice(0,el);
+            let rowHeadersBack = this.rowHeaders.slice(el+1, this.rowHeaders.length);
+            this.rowHeaders = [...rowHeadersFront,...rowHeadersBack]
+        })
+        this.data = util.chop(this.data, matchrows, regindex, false);
+    }
 }
 
 exports.Parser = Parser;
