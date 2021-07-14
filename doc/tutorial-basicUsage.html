@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>example.js - Documentation</title>
+    <title>Basic Usage - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,91 +29,99 @@
 
 <div id="main">
     
-    <h1 class="page-title">example.js</h1>
+    <h1 class="page-title">Basic Usage</h1>
     
 
-    
-
-
-
-    
     <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @namespace Example
- */
 
-const Parser = require('./parser')
-const util = require('./util')
-const fs = require('fs').promises;
+<header>
+    
+</header>
 
-const inputPath = "./test_data/maritaldataLarge.csv";
-const outputPath = "./json_results/maritaldataLarge.json";
-
-/**
- * An example of using this library to parse a .csv into a mapped .json
- * @memberof! Example
- * @see {@link https://github.com/klm127/census-csv-parser/tree/master/test_data | input csvs on Github} for example inputs.
- * @see {@link https://github.com/klm127/census-csv-parser/tree/master/json_results | output .jsons on Github } for example outputs.
- * @example &lt;caption>Example.js - using fs to write files and census-csv-parser members to process census data&lt;/caption>
-
-const csv = require('census-csv-parser');
+<article>
+    <h1>Tutorial Stubs</h1>
+<h3>Why census-csv-parser</h3>
+<h3>Installing</h3>
+<h3>Importing</h3>
+<h3>What Parser Does</h3>
+<h3>Accessing Parser</h3>
+<p><a href="Parser.html">Parser</a> prepares data for conversion into a .json object. It simplifies the management of headers and nested properties. Once you have the <code>census-csv-parser</code> node module installed in your <code>node_modules</code> folder, you can access <code>Parser</code> with the following syntax in your node javascript file:</p>
+<pre class="prettyprint source"><code>const csv = require('census-csv-parser');
 const Parser = csv.Parser;
-const util = csv.util;
+</code></pre>
+<h3>Loading some data</h3>
+<p>Data is loaded into a <code>Parser</code> instance at the time of its construction. The data is often a two-dimensional array, but it may also be a csv string if rows are delimited by a newline character and columns are delimited by a coma. <a href="util.html">util</a> can create 2-D arrays from strings delimited in other ways with the <code>csvArray</code> function.</p>
+<p><strong>Example A: Simple Array Initialization</strong></p>
+<pre class="prettyprint source"><code>//...
+let myData = [
+    [&quot;City&quot;, &quot;Population&quot;, &quot;Primary Industry&quot;,&quot;Cost of Living versus National Average&quot;],
+    [&quot;New York City&quot;, 8550405, &quot;Financial Services&quot;,1.2],
+    [&quot;Boston&quot;, 667137, &quot;Education Services&quot;, 1.2],
+    [&quot;Washington DC&quot;, 702445, &quot;Federal Government&quot;, 1.17]
+    [&quot;Chicago&quot;,2720546,&quot;Financial Services&quot;,0.99],
+    [&quot;Detroit&quot;,677116,&quot;Automobile Manufacturing&quot;,0.89],
+    [&quot;Houston&quot;,2296224,&quot;Crude Petroleum and Natural Gas Extraction&quot;,1.08 ]
+]
+let myParser = new Parser(myData);
+</code></pre>
+<p>You can also use the <a href="https://nodejs.org/api/fs.html">fs module</a> to retrieve data from a file.</p>
+<p><strong>Example B: Using Data from a File</strong></p>
+<pre class="prettyprint source"><code>//...
+const fs = require('fs').promises;
+const inputPath = &quot;./raw-data/cityComparisons.csv&quot;;
 
-async function example(){
-    const content = await fs.readFile(inputPath,'utf8'); // get the raw text
-    let arr = util.csvArray(content,/","/); // turn text to csv
-    // clean data
-    arr = util.transpose(arr); // rotate array so rows become columns, columns become rows
-    arr = util.chop(arr,/Margin of Error!!/,-1); // delete any row with the word Margin of Error!! in any cell
-    arr = util.chopColumn(arr,0); // remove column 0
-    arr = util.clear(arr,/Estimate!!/); //clear the word "Estimate!!" wherever it's found in any cell in the array
-    arr = util.chop(arr, 0); // remove the first row
-    arr = util.clear(arr); // clear quotation marks
-    arr = util.numerify(arr); // turn string numbers to numbers
-    // parse to js obj
-    let parser = new Parser(arr); // set up a parser
-    parser.setHeaders(0,0); // set headers rows and columns
-    parser.setProps('row'); // this means the row headers will be attribute keys while top level object names will be column headers
-    parser.propsToArray(/!!/); // split the properties into sub arrays for nested attributes
-    let json = parser.mapProps(); // create the json
-    json = JSON.stringify(json); // turn the json into a string
-    await fs.writeFile(outputPath,json).catch((e)=> {console.log('error writing file'); console.log(e);}) // write to file
-
-}
-example().catch( (ex) => {
-    console.log(`error!\n${ex}`) // catch errors
-})
- */
-async function example(){
-    const content = await fs.readFile(inputPath,'utf8');
-    let arr = util.csvArray(content,/","/);
-    arr = util.transpose(arr);
-    arr = util.chop(arr,/Margin of Error!!/,-1);
-    arr = util.chopColumn(arr,0);
-    arr = util.clear(arr,/Estimate!!/);
-    arr = util.chop(arr, 0);
-    arr = util.clear(arr);
-    arr = util.numerify(arr);
-    let parser = new Parser(arr);
-    parser.setHeaders(0,0);
-    parser.setProps('row');
-    parser.propsToArray(/!!/);
-    let json = parser.mapProps();
-    json = JSON.stringify(json);
-    await fs.writeFile(outputPath,json).catch((e)=> {console.log('error writing file'); console.log(e);})
+async function loadCsv() {
+    let csvData = await fs.readFile(inputPath, 'utf8');
+    let parser = new Parser(csvData);
+    // ....
 
 }
-example().catch( (ex) => {
+loadCsv().catch( (ex)=> {
     console.log(`error!\n${ex}`)
 })
+
 </code></pre>
-        </article>
-    </section>
+<h3>Configuring Parser</h3>
+<p>Parser must be configured to be properly used. It must be told which rows are row headers and which column contains the column headers (sometimes 0,0) and whether it should be nesting the columns into rows when it creates the .json object or the rows into the columns. The parser is configured by using the <code>setHeaders</code> and <code>setProps</code> methods.</p>
+<p><strong>Example Configuring Parser</strong>:</p>
+<pre class="prettyprint source"><code>//...
+let myParser = new Parser(myData);
+parser.setHeaders(0,0);
+parser.setProps('COL');
+</code></pre>
+<h3>Parser Output</h3>
+<h3>Row Major Example</h3>
+<h3>Column Major Example</h3>
+<h3>Cleaning Data with Parser</h3>
+<h3>Example Output</h3>
+<pre class="prettyprint source"><code>js {
+    &quot;abc&quot;:123
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Header1</th>
+<th>Header2</th>
+<th>Header3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data1</td>
+<td>data2</td>
+<td>data3</td>
+</tr>
+<tr>
+<td>data11</td>
+<td>data12</td>
+<td>data13</td>
+</tr>
+</tbody>
+</table>
+</article>
 
-
-
+</section>
 
 </div>
 

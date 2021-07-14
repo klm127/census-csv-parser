@@ -10,7 +10,7 @@
     "document-docdash": "jsdoc . -t ./node_modules/docdash -R README.md -d ./doc/",
     "document-clean": "jsdoc . -t ./node_modules/clean-jsdoc-theme -d ./doc/ -R README.md",
     "document": "jsdoc . -d ./doc/ -R README.md",
-    "document-minami": "jsdoc . -d ./doc/ -R README.md -t ./node_modules/minami"
+    "document-minami": "jsdoc . -d ./doc/ -R README.md -t ./node_modules/minami -u ./tutorials/ && start ./doc/index.html"
   },
   "keywords": [
     "census",
