@@ -1,4 +1,9 @@
 
+2021/07/14 - v 1.0.4 -
+
+    Added chop and ChopColumn functions to the Parser object, and added functionality to allow searching via headers, added corresponding tests.
+
+    Started tutorial stubs.
 
 2021/07/10 - v 1.0.3 - 
 
