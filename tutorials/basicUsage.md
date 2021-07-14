@@ -72,12 +72,49 @@ parser.setProps('COL');
 
 ### Parser Output
 
-You can retrieve the Parser output with `Parser.mapProps`. 
-
-### Row Major Example
+You can retrieve the Parser output with `Parser.mapProps`. It will return a `.json` object nested based on the way it was configured.
 
 ### Column Major Example
 
+In a column-major configuration, the header column becomes the first level of javascript objects. 
+
+**Example simple Column-Major**
+```
+let myData = [
+    ["City", "Population", "Primary Industry","Cost of Living versus National Average"],
+    ["New York City", 8550405, "Financial Services",1.2],
+    ["Boston", 667137, "Education Services", 1.2],
+    ["Washington DC", 702445, "Federal Government", 1.17]
+    ["Chicago",2720546,"Financial Services",0.99],
+    ["Detroit",677116,"Automobile Manufacturing",0.89],
+    ["Houston",2296224,"Crude Petroleum and Natural Gas Extraction",1.08 ]
+]
+let myParser = new Parser(myData);
+myParser.setHeaders(0,0);
+myParser.setProps('COL');
+console.log(myParser.mapProps());
+```
+**Example output**
+```
+{
+  overlapHeader: 'City',
+  'New York City': {
+    Population: 8550405,
+    'Primary Industry': 'Financial Services',
+    'Cost of Living versus National Average': 1.2
+  },
+  Boston: {
+    Population: 667137,
+    'Primary Industry': 'Education Services',
+    'Cost of Living versus National Average': 1.2
+  }, //... etc
+}
+```
+
+_Note_: If you set the header to a duplicative value, you run the risk of losing data. For example, if `setHeaders(0,2)` was called instead (making the header column 'Primary Industry'), New York City's data would get overwritten By Chicago's, because they have the same primary industry. Header values should be unique.
+
+
+### Row Major Example
 ### Cleaning Data with Parser
 
 ### Example Output

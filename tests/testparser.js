@@ -213,6 +213,7 @@ try {
       'New York': { Population: '15m', 'Most Common Profession': 'Wall Street Banker' }
     }, 'Chopping rows with header column worked as expected')
     log('Chopping rows on header regex worked as expected','green')
+
     
 
 

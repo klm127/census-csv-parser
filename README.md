@@ -165,4 +165,4 @@ This mapping, defined in the `chain` and `chainMultiple` functions in the `util`
 
 ## Other
 
-See the [Example](./Example.html) namespace for more example usage.
+See the [Example](./Example.html) namespace for more example usage and the [Tutorial](./tutorial-basicUsage.html) for a stepwise breakdown.
