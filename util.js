@@ -28,7 +28,7 @@ function csvArray(csvtext, delim=',',rowdelim='\n',trim=true) {
     return arr;
 }
 /**
- * Chops a row from an array. 
+ * Chops a row from an array, non mutating. 
  * @param {Array[]} arr - the 2-dimensional array to operate on
  * @param {(number | number[] | RegExp) } find The row index to remove, an array of row indexes to remove, or a regular expression. If a regular expression is passed, all rows that match the regex will be removed. Numbers may be negative to operate from the end.
  * @param {number} [regindex=0] The **column** index to search when using regular expressions. Defaults to the first column, index 0, as the typical use case would be to remove rows corresponding to unwanted data categories. If set to -1, chop will search the entire array for the regex, and whenever it finds a match, it will delete the entire row on which it was found.
@@ -85,11 +85,12 @@ function chop(arr, find, regIndex = 0, keepFirst=false) {
     return arr; //if wrong find type was passed, just give back the array
 }
 /**
- * Chops a column from an array
+ * Chops a column from an array, non mutating.
  * @param {*} arr A 2 dimensional array to operate on. Rows should be **equal length**
  * @param {(number | number[] | RegExp)} find The column index to remove, an array of column indexes to remove, or a regular expression. If a regular expression is passed _all_ columns that match on the RegIndex row will be removed. Negative numbers will operate from the last column backwards. 
  * @param {number} [regIndex=0] The **row** index to search when using regular expressions as the find parameter. Defaults to first row, index 0, as the typical use case would be to remove columns representing unwanted data, and column headers are usually located at row 0. If set to -1, chopColumn will search the entire array for a regex, and whenever it finds a match, it will delete the entire column on which it was found.
  * @param {boolean} [keepFirst=false] If set to true, chopColumn will ignore the first column of the .csv, which is often the header row when doing RegEx based searches.
+ * @returns {Array} - A 2-dimensional array with the indicated columns removed
  * @memberof util
  */
 function chopColumn(arr, find, regIndex = 0, keepFirst = false) {

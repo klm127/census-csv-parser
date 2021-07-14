@@ -153,6 +153,54 @@ try {
       Boston: { Population: '1.8m', 'Most Common Profession': 'Government Worker' },
     }, 'Parser chop did not process regex correctly');
     log('Parser removed row headers as well as data when passed regex to chop','green');
+
+    parser4 = new Parser(testArray2);
+    parser4.setHeaders(0,0);
+    parser4.setProps('COL');
+    parser4.chopColumn(/Government/);
+    assert.deepStrictEqual(parser4.mapProps(), {
+      overlapHeader: 'City',
+      Boston: { Population: '1.8m' },
+      'Los Angeles': { Population: '5m' },
+      'New York': { Population: '15m' }
+    }, 'column was not removed as expected')
+    log('Parser removed a column based on a regex and removed the column header as well','green');
+
+    parser4 = new Parser(testArray2);
+    parser4.setHeaders(0,0);
+    parser4.setProps('COL');
+    parser4.chopColumn([1,0]);
+    assert.deepStrictEqual(parser4.mapProps(), {
+      overlapHeader: 'City',
+      Boston: {},
+      'Los Angeles': {},
+      'New York': {}
+    }, 'array of columns were not removed as expected.')
+    log('Parser removed an array of columns as expected','green');
+
+    parser4 = new Parser(testArray2);
+    parser4.setHeaders(0,0);
+    parser4.setProps('COL');
+    parser4.chopColumn(/Population/,'Header');
+    assert.deepStrictEqual(parser4.mapProps(), {
+      overlapHeader: 'City',
+      Boston: { 'Most Common Profession': 'Government Worker' },
+      'Los Angeles': { 'Most Common Profession': 'Street Performer' },
+      'New York': { 'Most Common Profession': 'Wall Street Banker' }
+    }, 'chopping columns based on header regex search did not work as expected')
+    log('chopping columns based on header regex search worked as expected','green')
+
+    parser4 = new Parser(testArray2);
+    parser4.setHeaders(0,0);
+    parser4.setProps('COL');
+    parser4.chopColumn([1,0],'Header');
+    assert.deepStrictEqual(parser4.mapProps(),{
+      overlapHeader: 'City',
+      Boston: {},
+      'Los Angeles': {},
+      'New York': {}
+    }, 'When passing an array to parser and telling it to regex search on column names, encountered unexpected result')
+    log('Chopping columns when giving parser confusing header info worked as expected','green')
     
 
 

@@ -231,6 +231,56 @@ class Parser {
         })
         this.data = util.chop(this.data, matchrows, regindex, false);
     }
+    /**
+     * Chops a column from an array
+     * @param {(number | number[] | RegExp)} find The column index to remove, an array of column indexes to remove, or a regular expression. If a regular expression is passed _all_ columns that match on the RegIndex row will be removed. Negative numbers will operate from the last column backwards. 
+     * @param {number | string} [regIndex=0] The **row** index to search when using regular expressions as the find parameter. Defaults to first row, index 0. Can also pass in the string "HEADER" to search the header row.
+     * @memberof Parser
+     */
+    chopColumn(find, regIndex=0) {
+        let arr = this.data;
+        let matchcols = [];
+        if(typeof regIndex == "string") {
+            if(find instanceof RegExp) {
+                this.columnHeaders.forEach( (header,index) => {
+                    if(find.test(header)) {
+                        matchcols.push(index);
+                    }
+                })
+            }
+        }
+        if(find instanceof RegExp && typeof regIndex != "string") {
+            if(regIndex < 0) {
+                this.data.forEach( (row) => {
+                    row.forEach( (el, index)=> {
+                        if(find.test(el)) {
+                            matchcols.push(index);
+                        }
+                    })
+                })
+            }
+            else {
+                arr[regIndex].forEach( (el,index) => {
+                    if(find.test(el)) {
+                        matchcols.push(index);
+                    }
+                })
+            }            
+        }
+        else if(find instanceof Array) {
+            matchcols = find;
+        }
+        else if(typeof find == 'number') {
+            matchcols = [find];
+        }
+        this.data = util.chopColumn(arr,matchcols);
+        matchcols = matchcols.filter( (el)=> typeof el == 'number').sort( (a,b)=> b-a); //remove non-numbers, sort DESC
+        matchcols.forEach( (el) => {
+            let columnHeadersFront = this.columnHeaders.slice(0,el);
+            let columnHeadersBack = this.columnHeaders.slice(el+1, this.columnHeaders.length)
+            this.columnHeaders = [...columnHeadersFront,...columnHeadersBack]
+        })
+    }
 }
 
 exports.Parser = Parser;
