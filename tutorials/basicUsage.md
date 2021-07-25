@@ -128,3 +128,13 @@ js {
 --- | --- | ---
 |data1|data2|data3|
 |data11|data12|data13|
+
+### Order
+
+1. Parser.setProps(row, column)
+
+1. Parser.setHeaders(rowOrColumnString)
+
+1. Parser.chop , mergeArray, etc
+
+1. Parser.mapProps();
