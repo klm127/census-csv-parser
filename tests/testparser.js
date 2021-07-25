@@ -214,6 +214,58 @@ try {
     }, 'Chopping rows with header column worked as expected')
     log('Chopping rows on header regex worked as expected','green')
 
+    // test merging a column into the row headers as an array for nesting
+    testArray = [
+      ["County","Industry","Number of Firms","Number of Employees"],
+      ["Mercer","Automobile Manufacturing", 3, 112],
+      ["Mercer","Wood Product Manufacturing", 12, 195],
+      ["Dodd","Food Service", 50, 220],
+      ["Dodd","Automobile Manufacturing", 1, 10]
+    ];
+    parser = new Parser(testArray);
+    parser.setHeaders(0,0)
+    parser.setProps('ROW');
+    parser.mergeToHeader(0);
+    let out = parser.mapProps();
+    assert.deepStrictEqual(out, {
+      overlapHeader: 'County',
+      'Number of Firms': {
+        Mercer: { 'Automobile Manufacturing': 3, 'Wood Product Manufacturing': 12 },
+        Dodd: { 'Food Service': 50, 'Automobile Manufacturing': 1 }
+      },
+      'Number of Employees': {
+        Mercer: {
+          'Automobile Manufacturing': 112,
+          'Wood Product Manufacturing': 195
+        },
+        Dodd: { 'Food Service': 220, 'Automobile Manufacturing': 10 }
+      }
+    },'Merging a col for array-style mapping did not work as expected');
+    log('Merging a column into the row headers worked as expected','green')
+
+    testArray = [
+      ["County","Franklin","Preston","Franklin","Preston","Preston"],
+      ["Industry","Financial Services","Financial Services","Auto Repair","Auto Repair","Consulting"],
+      ["Tax Revenue (mil)",3,8,0.4,0.3,2],
+      ["Employees", 900, 1950, 320, 640, 50]
+    ]
+    parser = new Parser(testArray);
+    parser.setHeaders(0,0);
+    parser.setProps('COL');
+    parser.mergeToHeader(0);
+    out = parser.mapProps();
+    assert.deepStrictEqual(out, {
+      overlapHeader: 'County',
+      'Tax Revenue (mil)': {
+        Franklin: { 'Financial Services': 3, 'Auto Repair': 0.4 },
+        Preston: { 'Financial Services': 8, 'Auto Repair': 0.3, Consulting: 2 }
+      },
+      Employees: {
+        Franklin: { 'Financial Services': 900, 'Auto Repair': 320 },
+        Preston: { 'Financial Services': 1950, 'Auto Repair': 640, Consulting: 50 }
+      }
+    }, 'Merging a row for array-style mapping did not work as expected');
+    log('Merging a row into the column headers worked as expected','green')
     
 
 

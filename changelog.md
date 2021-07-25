@@ -1,3 +1,6 @@
+2021/07/25 - v 1.0.5 -
+
+    Added mergeToHeader function to Parser. This takes a row or column (depending on how you set your headers) and merges into the header column as an array, allowing for the nesting of data. 
 
 2021/07/14 - v 1.0.4 -
 

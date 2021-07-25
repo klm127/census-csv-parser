@@ -133,6 +133,43 @@ class Parser {
         }
     }
     /**
+     * Merges another row or column into the header column so that header column becomes an array, which causes the higher indexed elements of the array to nest inside the lower indexed elements of the array in the final output json object.
+     * 
+     * @param {number} index The index to merge to the header(not counting the header itself in the index). If headers set to row, merges that index row. If set to col, merges that column
+     */
+    mergeToHeader(index) {
+        if(this.propArr == 'COL') {
+            let mergeRow = this.data[index];
+            for(let i = 0; i < mergeRow.length; i++) {
+                let header = this.columnHeaders[i];
+                let appendValue = mergeRow[i];
+                if(header instanceof Array) {
+                    header.push(appendValue);
+                }
+                else {
+                    this.columnHeaders[i] = [header, appendValue];
+                }
+            }
+            this.data.splice(index,1)
+            this.rowHeaders.splice(index,1)
+        }
+        else {
+            for(let i = 0; i < this.data.length; i++) {
+                let mergeValue = this.data[i][index];
+                let previousHeader = this.rowHeaders[i];
+                if(previousHeader instanceof Array) {
+                    previousHeader.push(mergeValue);
+                }
+                else {
+                    this.rowHeaders[i] = [previousHeader, mergeValue];
+                }
+                this.data[i].splice(index,1);
+            }
+            this.columnHeaders.splice(index,1);
+
+        }
+    }
+    /**
      * Maps data to an object. The object will contain a property for each value not in the selected props array. For each array in the selected props array, a chain of sub-properties will be created. Metadata, if extant, will be added as properties to the mother object.
      * So if you have this data:
      * <table>
