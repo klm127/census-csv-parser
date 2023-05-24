@@ -329,5 +329,19 @@ class Parser {
     }
 }
 
+/** 
+ * A class that can perform special mapping functions.
+ * 
+ * @see https://www.quaffingcode.com/census-csv-parser/doc/Parser.html
+ * 
+ * */
 exports.Parser = Parser;
+
+/**
+ * Utility functions used by the parser for transforming arrays.
+ * 
+ * Can be handy on their own.
+ * 
+ * @see https://www.quaffingcode.com/census-csv-parser/doc/util.html
+ */
 exports.util = util;
